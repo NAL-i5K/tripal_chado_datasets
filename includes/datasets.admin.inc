@@ -180,44 +180,60 @@ function datasets_organism_approval_submit($form, &$form_state) {
      ***********************************************************
      * INSERT the approved request project 'organism' into  chado .*/
 
-    //TODO: its done this way because it publishes the content.  Instead it should be inserted into Chado and published--> this will make it Tripal 2/3 agnostic.
 
-    $node = new stdClass();
-    $node->type = "chado_organism";
-    $node->language = "und";
-    $node->title = $values['genus'] . " " . $values['species'];
-    $node->uid = 1;
-    $node->status = 0;
-    $node->created = time();
-    $node->changed = time();
-    $node->promote = 0;
+    //Tripal 2 way
+
+    if (function_exists('chado_get_id_from_nid')) {
+
+      $node = new stdClass();
+      $node->type = "chado_organism";
+      $node->language = "und";
+      $node->title = $values['genus'] . " " . $values['species'];
+      $node->uid = 1;
+      $node->status = 0;
+      $node->created = time();
+      $node->changed = time();
+      $node->promote = 0;
 
 
-    $node->genus = trim($values['genus']);
-    $node->species = trim($values['species']);
-    $node->abbreviation = $node->genus[0] . " . " . $node->species; //trim($data->abbreviation);
-    $node->common_name = trim($values['common_name']);
-    $node->description = trim($values['description']);
+      $node->genus = trim($values['genus']);
+      $node->species = trim($values['species']);
+      $node->abbreviation = $node->genus[0] . " . " . $node->species; //trim($data->abbreviation);
+      $node->common_name = trim($values['common_name']);
+      $node->description = trim($values['description']);
 
-    node_save($node);
+      node_save($node);
 
-    $organism_id = $node->organism->organism_id;
-    $check_org_id = chado_get_id_from_nid('organism', $node->nid);
-    if (!$check_org_id) {
-      $record = new stdClass();
-      $record->nid = $node->nid;
-      $record->vid = $node->vid;
-      $record->organism_id = $organism_id;
-      // drupal_write_record('chado_organism', $record);
+      $organism_id = $node->organism->organism_id;
+      $check_org_id = chado_get_id_from_nid('organism', $node->nid);
+      if (!$check_org_id) {
+        $record = new stdClass();
+        $record->nid = $node->nid;
+        $record->vid = $node->vid;
+        $record->organism_id = $organism_id;
+
+      }
     }
-    // Adding the new approved organism to the datasets settings textarea - admin/structure/webapollo/settings.
 
-    //      $web_apollo_organism = variable_get('web_apollo_organism');
-    //      $web_apollo_organism = $web_apollo_organism . "\n";
-    //      $organism_shortcut = strtolower(substr($values['genus'], 0, 3) . substr($values['species'], 0, 3));
-    //      $web_apollo_organism .= $organism_shortcut . '|' . $values['genus'] . ' ' . $values['species'] . '|0';
-    //
-    //      variable_set('web_apollo_organism', $web_apollo_organism);
+    //Tripal 3 way
+    //TODO:  Instead, let's check of the organism entit ycontent type is defined, and if so use that (IE tripal 3 is setup for organism)
+    else {
+
+      $genus = trim($values['genus']);
+      $species = trim($values['species']);
+      $uid = 1;
+      $abbreviation = $genus[0] . ". " . $species;
+      $common_name = trim($values['common_name']);
+      $description = trim($values['description']);
+
+      $values = [];
+      $options = [];
+      chado_insert_record('organism', $values, $options);
+      
+      }
+
+
+    // Adding the new approved organism to the datasets settings textarea - admin/structure/webapollo/settings.
 
     /*******************************************************************************************
      *******************************************************************************************/
