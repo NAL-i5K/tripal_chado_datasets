@@ -1,3 +1,5 @@
+Module status **under development, not suitable for deployment**.
+
 The datasets module provides forms for users to submit data.  This includes: 
 
 * creating an organism, and waiting for admin approval before its created
