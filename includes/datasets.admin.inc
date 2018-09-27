@@ -444,6 +444,8 @@ class DsTableSort extends TableSort {
 }
 
 /**
+ * Build a table of of all submissions, or of submissions for a given organism
+ * if $organism is supplied.
  *
  * @param null $organism
  *  The chado record organism_id.
@@ -487,12 +489,13 @@ function datasets_list_all_submissions($organism = NULL) {
     //If this is a new organism, build something to display to the sure.
     if (isset($organism_store[$organism_id])) {
       $organism_string = $organism_store[$organism_id];
-    }else {
+    }
+    else {
       $organism_data = chado_get_organism(['organism_id' => $organism_id]);
       $organism_string = $organism_data->abbreviation . ', (' . $organism_data->common_name . ')';
       $organism_store[$organism_id] = $organism_string;
     }
-    $rows[$i][] = $data->organism_string;
+    $rows[$i][] = $organism_string;
     $rows[$i][] = $data->dataset_type;
     $user = user_load($data->uid);
     $rows[$i][] = (!empty($user)) ? $user->name : '';
@@ -740,7 +743,6 @@ function datasets_information_import() {
 
   return $output;
 }
-
 
 
 /**
