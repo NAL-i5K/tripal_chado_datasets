@@ -645,7 +645,7 @@ function datasets_schema() {
         'length' => 255,
       ],
       'organism' => [
-        'description' => 'Organism.',
+        'description' => 'Chado organism record ID.',
         'type' => 'varchar',
         'length' => 255,
         'not null' => TRUE,

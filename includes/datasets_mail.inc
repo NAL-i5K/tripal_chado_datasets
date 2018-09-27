@@ -3,7 +3,7 @@
 /**
  * drupal mail looks for a function that matches the first parameter _ mail
  * to build the message.
- * 
+ *
  * @param $key
  * @param $message
  * @param $params

@@ -199,14 +199,9 @@ function datasets_captcha($op, $captcha_type = '') {
  * @return string
  */
 function datasets_information_view($oa_id) {
-  // Select table
   $query = db_select('ds_submissions', 'os');
-  // Select fields
   $query->fields("os");
-  // Condition
   $query->condition("oa_id", $oa_id);
-
-  // Execute query
   $result = $query->execute()->fetchAll();
 
   // Now build the form array
@@ -234,6 +229,11 @@ function datasets_information_view($oa_id) {
   return $output;
 }
 
+/**
+ * @param $variables
+ *
+ * @return string
+ */
 function theme_datasets_table($variables) {
   $header = $variables['header'];
   $rows = $variables['rows'];

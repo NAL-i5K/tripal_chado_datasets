@@ -1,141 +1,20 @@
 <?php
 
+//TODO:  these functions were the admin form, but i would like to move them to say a curation form, and use "admin" to refer ot administering this module itself.
+
 /**
  * @file
  * Admin page callbacks for the datasets module.
- */
-
-
-/**
  * Form builder; Admin interface to approve/reject the organisms add by the
  * co-ordinators.
  */
 
 /**
- * Admin interface to approve/reject the organisms add by the
- * co-ordinators.
- */
-function dataset_cordinator_organisms() {
-  $output = "";
-
-  if (isset($_GET['sort']) && isset($_GET['order'])) {
-    // Sort it Ascending or Descending?
-    if ($_GET['sort'] == 'asc') {
-      $sort = 'ASC';
-    }
-    else {
-      $sort = 'DESC';
-    }
-
-    // Which column will be sorted
-    switch ($_GET['order']) {
-      case 'Request User':
-        $order = 'fullname';
-        break;
-      case 'Email':
-        $order = 'email';
-        break;
-      case 'Scientific Name':
-        $order = 'genus';
-        break;
-      case 'Status':
-        $order = 'status';
-        break;
-      default:
-        $order = 'created';
-    }
-  }
-  else {
-    // Default sort
-    $sort = 'DESC';
-    $order = 'created';
-  }
-  // Select table
-  $query = db_select("ds_request_project", "rp");
-  // Select fields
-  $query->fields("rp", [
-    "id",
-    "fullname",
-    "email",
-    "genus",
-    "species",
-    "is_ncbi_submitted",
-    "involved_in_generation",
-    "status",
-    "created",
-  ]);
-
-  // Set order by
-  $query->orderBy($order, $sort);
-  // For pagination
-  $query = $query->extend('TableSort')->extend('PagerDefault')->limit(25);
-
-  // Execute query
-  $result = $query->execute();
-
-  // Prepare table header
-  // Prepare table header
-  $header = [
-    ["data" => t('Request User'), "field" => "fullname"],
-    ["data" => t('Email'), "field" => "email"],
-    ["data" => t('Scientific Name'), "field" => "scientific_name"],
-    ["data" => t('Submitted GA to NCBI?'), "field" => "genome_assembly_hosted"],
-    [
-      "data" => t('Involved in the <br>generation of GA?'),
-      "field" => "involved_in_generation",
-    ],
-    ["data" => t('Status'), "field" => "status"],
-    ["data" => t('Created'), "field" => "created", 'sort' => 'desc'],
-    [],
-  ];
-  $rows = [];
-  $i = 0;
-
-  // Looping for filling the table rows
-  while ($data = $result->fetchObject()) {
-    // Fill the table rows
-    $rows[$i][] = $data->fullname;
-    $rows[$i][] = $data->email;
-    $rows[$i][] = $data->genus . " " . $data->species;
-    $rows[$i][] = $data->is_ncbi_submitted;
-    $rows[$i][] = $data->involved_in_generation;
-    $status = '';
-    if ($data->status == 1) {
-      $status = 'Approved';
-    }
-    elseif ($data->status == 0) {
-      $status = 'Rejected';
-    }
-    elseif ($data->status == 2) {
-      $status = 'Pending';
-    }
-    $rows[$i][] = $status;
-    $rows[$i][] = date('M d Y h:i:s A', $data->created);
-    $rows[$i][] = l(t('Edit'), 'datasets/organism/' . $data->id . '/edit');
-    $i++;
-  }
-  // Output of table with the paging
-  $output = theme_table(
-      [
-        "header" => $header,
-        "rows" => $rows,
-        "attributes" => [],
-        "sticky" => TRUE,
-        // Table header will be sticky
-        "caption" => "",
-        "colgroups" => [],
-        "empty" => t("Table has no row!")
-        // The message to be displayed if table is empty
-      ]
-    ) . theme("pager");
-
-  return $output;
-}
-
-
-/**
  * @hook_form()
  * Requested Organism form with options Approve/Reject
+ * Note: the form and form_state parameters are ignored here.
+ *
+ * @param $id = ds_request_project.id
  */
 function datasets_organism_approval($form, &$form_state, $id) {
   $header = [];
@@ -413,12 +292,6 @@ function datasets_organism_approval_submit($form, &$form_state) {
  * Form at admin/structure/datasets/report
  */
 function dataset_report($form, &$form_state) {
-  //  $web_apollo_organism = variable_get('web_apollo_organism');
-  //  if (!empty($web_apollo_organism)) {
-  //    $organism_options = get_webapollo_organisms($web_apollo_organism);
-  //  }
-  //  ksort($organism_options, 2);
-
   $organism_options = chado_get_organism_select_options(FALSE);
 
   $organism_selected = 0;
@@ -453,10 +326,10 @@ function dataset_report($form, &$form_state) {
 
   $rows = [];
   if (isset($organism_selected)) {
-    $rows = datasets_all($organism_selected);
+    $rows = datasets_list_all_submissions($organism_selected);
   }
   else {
-    $rows = datasets_all();
+    $rows = datasets_list_all_submissions();
   }
 
   // Prepare table header
@@ -571,14 +444,19 @@ class DsTableSort extends TableSort {
 }
 
 /**
- * @param $organism
+ *
+ * @param null $organism
+ *  The chado record organism_id.
  *
  * @return array
  */
-function datasets_all($organism) {
+
+function datasets_list_all_submissions($organism = NULL) {
 
   $sort = 'DESC';
   $order = 'name';
+
+  $organism_store = [];
 
   $query = db_select("ds_submissions", "c");
   $query->fields("c", [
@@ -604,12 +482,17 @@ function datasets_all($organism) {
     $rows[$i][] = $data->name;
     $rows[$i][] = $data->email;
 
-    //TODO
-    //we have the NCBI organism accession stored in the table.
-    //We want instead the organism name, etc
+    $organism_id = $data->organism;
 
-    $rows[$i][] = $data->organism;
-    //    $rows[$i][] = $organism_options[$data->organism];
+    //If this is a new organism, build something to display to the sure.
+    if (isset($organism_store[$organism_id])) {
+      $organism_string = $organism_store[$organism_id];
+    }else {
+      $organism_data = chado_get_organism(['organism_id' => $organism_id]);
+      $organism_string = $organism_data->abbreviation . ', (' . $organism_data->common_name . ')';
+      $organism_store[$organism_id] = $organism_string;
+    }
+    $rows[$i][] = $data->organism_string;
     $rows[$i][] = $data->dataset_type;
     $user = user_load($data->uid);
     $rows[$i][] = (!empty($user)) ? $user->name : '';
@@ -617,9 +500,7 @@ function datasets_all($organism) {
     $rows[$i][] = l(t('View'), '/datasets/' . $data->oa_id . '/view', ['attributes' => ['target' => '_blank']]) . ' ' . l(t('Delete'), '/datasets_og/' . $data->oa_id . '/delete', ['attributes' => ['target' => '_blank']]);
     $i++;
   }
-
   return $rows;
-
 }
 
 function datasets_md_delete_form($form, &$form_state, $item) {
@@ -859,3 +740,120 @@ function datasets_information_import() {
 
   return $output;
 }
+
+
+
+/**
+ *  Admin interface to approve/reject the organisms add by the
+ * co-ordinators. This is the "Request project list" tab.
+ * located at: admin/structure/datasets
+ *
+ * @return string
+ */
+function dataset_cordinator_organisms() {
+  $output = "";
+
+  if (isset($_GET['sort']) && isset($_GET['order'])) {
+    // Sort it Ascending or Descending?
+    if ($_GET['sort'] == 'asc') {
+      $sort = 'ASC';
+    }
+    else {
+      $sort = 'DESC';
+    }
+
+    // Which column will be sorted
+    switch ($_GET['order']) {
+      case 'Request User':
+        $order = 'fullname';
+        break;
+      case 'Email':
+        $order = 'email';
+        break;
+      case 'Scientific Name':
+        $order = 'genus';
+        break;
+      case 'Status':
+        $order = 'status';
+        break;
+      default:
+        $order = 'created';
+    }
+  }
+  else {
+    // Default sort
+    $sort = 'DESC';
+    $order = 'created';
+  }
+  $query = db_select("ds_request_project", "rp");
+  $query->fields("rp", [
+    "id",
+    "fullname",
+    "email",
+    "genus",
+    "species",
+    "is_ncbi_submitted",
+    "involved_in_generation",
+    "status",
+    "created",
+  ]);
+  $query->orderBy($order, $sort);
+  $query = $query->extend('TableSort')->extend('PagerDefault')->limit(25);
+  $result = $query->execute();
+
+  $header = [
+    ["data" => t('Request User'), "field" => "fullname"],
+    ["data" => t('Email'), "field" => "email"],
+    ["data" => t('Scientific Name'), "field" => "scientific_name"],
+    ["data" => t('Submitted GA to NCBI?'), "field" => "genome_assembly_hosted"],
+    [
+      "data" => t('Involved in the <br>generation of GA?'),
+      "field" => "involved_in_generation",
+    ],
+    ["data" => t('Status'), "field" => "status"],
+    ["data" => t('Created'), "field" => "created", 'sort' => 'desc'],
+    [],
+  ];
+  $rows = [];
+  $i = 0;
+
+  // Looping for filling the table rows
+  while ($data = $result->fetchObject()) {
+    $rows[$i][] = $data->fullname;
+    $rows[$i][] = $data->email;
+    $rows[$i][] = $data->genus . " " . $data->species;
+    $rows[$i][] = $data->is_ncbi_submitted;
+    $rows[$i][] = $data->involved_in_generation;
+    $status = '';
+    if ($data->status == 1) {
+      $status = 'Approved';
+    }
+    elseif ($data->status == 0) {
+      $status = 'Rejected';
+    }
+    elseif ($data->status == 2) {
+      $status = 'Pending';
+    }
+    $rows[$i][] = $status;
+    $rows[$i][] = date('M d Y h:i:s A', $data->created);
+    $rows[$i][] = l(t('Edit'), 'datasets/organism/' . $data->id . '/edit');
+    $i++;
+  }
+  // Output of table with the paging
+  $output = theme_table(
+      [
+        "header" => $header,
+        "rows" => $rows,
+        "attributes" => [],
+        "sticky" => TRUE,
+        // Table header will be sticky
+        "caption" => "",
+        "colgroups" => [],
+        "empty" => t("Table has no row!")
+        // The message to be displayed if table is empty
+      ]
+    ) . theme("pager");
+
+  return $output;
+}
+
