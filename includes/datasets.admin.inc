@@ -216,7 +216,7 @@ function datasets_organism_approval_submit($form, &$form_state) {
     }
 
     //Tripal 3 way
-    //TODO:  Instead, let's check of the organism entit ycontent type is defined, and if so use that (IE tripal 3 is setup for organism)
+    //TODO:  Instead, let's check of the organism entity content type is defined, and if so use that (IE tripal 3 is setup for organism)
     else {
 
       $genus = trim($values['genus']);
@@ -226,11 +226,24 @@ function datasets_organism_approval_submit($form, &$form_state) {
       $common_name = trim($values['common_name']);
       $description = trim($values['description']);
 
-      $values = [];
+      $values = [
+        'abbreviation' => $abbreviation,
+        'genus' => $genus,
+        'species' => $species,
+        'common_name' => $common_name,
+        'comment' => $description,
+      ];
       $options = [];
-      chado_insert_record('organism', $values, $options);
-      
+      $record = chado_insert_record('organism', $values, $options);
+
+      if ($record) {
+        tripal_set_message(t('Organism created.  Please run publish for organism entities.'), TRIPAL_NOTICE);
+
       }
+      else {
+        tripal_set_message(t('Error creating organism!', TRIPAL_ERROR));
+      }
+    }
 
 
     // Adding the new approved organism to the datasets settings textarea - admin/structure/webapollo/settings.
