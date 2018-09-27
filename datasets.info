@@ -1,0 +1,13 @@
+name = Datasets form
+description = Form to fill datasets data and put them into flat files
+package = Custom
+version = 7.x-1.0
+core = 7.x
+project = datasets
+
+dependencies[] = tripal
+dependencies[] = date
+dependencies[] = date_api
+dependencies[] = date_popup
+dependencies[] = honeypot
+dependencies[] = file_resup

@@ -1,0 +1,25 @@
+#project-dataset-submission-account .grippie {
+  margin-left: 0px !important; 
+  width: 431px;
+}
+
+#project-dataset-submission-account .form-required {
+  color: red;
+}
+
+.captcha {
+  position: relative;
+}
+
+.form-item-captcha-response > input {
+    float: left;
+    position: relative;
+    left: 254px;
+}
+
+#info_markup {
+    font-style: italic;
+    font-weight: 200;
+    font-size: 1.3em;
+    margin-bottom: 14px;
+}

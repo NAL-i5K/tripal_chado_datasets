@@ -1,0 +1,967 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the CAPTCHA module.
+ */
+
+
+ /**
+  * Implements of hook_install().
+  */
+
+function datasets_install(){
+
+//TODO: theres probably a drupal way to define sequence....
+// Also, are these sequence tables necessary?  can't we use a autoincrementing pkey instead?
+// 
+// $sql = 'CREATE SEQUENCE gene_prediction_pid_seq
+//    START WITH 1
+//    INCREMENT BY 1
+//    NO MINVALUE
+//    NO MAXVALUE
+//    CACHE 1';
+//
+//    db_query($sql);
+//
+// $sql = 'CREATE SEQUENCE mapped_dataset_id_seq
+//    START WITH 1
+//    INCREMENT BY 1
+//    NO MINVALUE
+//    NO MAXVALUE
+//    CACHE 1';
+//
+//    db_query($sql);
+
+   $t = get_t();
+   drupal_set_message($t('datasets module was installed.'), 'status');
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function datasets_schema() {
+  // Table for the ds_project_dataset_account.
+  $schema['ds_project_dataset_account'] = [
+    'description' => 'User registeration form for project or dataset account.',
+    'fields' => [
+      'psid' => [
+        'description' => 'Primary Key: Unique ID.',
+        'type' => 'serial',
+        'not null' => TRUE,
+      ],
+      'name' => [
+        'type' => 'varchar',
+        'length' => 60,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'user name.',
+      ],
+      'email' => [
+        'type' => 'varchar',
+        'length' => 254,
+        'not null' => FALSE,
+        'default' => '',
+        'description' => "User's e-mail address.",
+      ],
+      'affiliation' => [
+        'type' => 'varchar',
+        'length' => 254,
+        'not null' => FALSE,
+        'default' => '',
+        'description' => "User's affiliation.",
+      ],
+      'content' => [
+        'type' => 'text',
+        'not null' => TRUE,
+        'size' => 'big',
+        'description' => 'Tell us about the data you want to submit or the project you want to start.',
+      ],
+
+      'created' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Timestamp for when user was created.',
+      ],
+
+    ],
+    'primary key' => ['psid'],
+    'unique keys' => [
+      'name' => ['name'],
+    ],
+  ];
+  $schema['ds_request_project'] = [
+    'description' => 'Request Project for New Organism.',
+    'fields' => [
+      'id' => [
+        'description' => 'project ID.',
+        'type' => 'serial',
+        'not null' => TRUE,
+      ],
+      'uid' => [
+        'description' => "User uid.",
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'genus' => [
+        'description' => "",
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'species' => [
+        'description' => "",
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'ncbi_taxid' => [
+        'description' => 'NCBI tax id.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+      'common_name' => [
+        'description' => 'common name for the species.',
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => TRUE,
+      ],
+      'genome_assembly_hosted' => [
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ],
+      'is_ncbi_submitted' => [
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ],
+      'is_assembly' => [
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ],
+      'involved_in_generation' => [
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ],
+      'description' => [
+        'type' => 'text',
+        'not null' => TRUE,
+        'size' => 'big',
+        'description' => 'description.',
+      ],
+      'fullname' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'email' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'status' => [
+        'description' => 'status of the project approved or rejected. 2 -pending, 1 - approve, 0 - rejected ',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 2,
+      ],
+      'created' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Timestamp for when user was created.',
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
+
+  $schema['ds_organism_assembly'] = [
+    'description' => 'Organism assembly.',
+    'fields' => [
+      'oa_id' => [
+        'description' => 'Primary Key: Unique ID.',
+        'type' => 'serial',
+        'not null' => TRUE,
+      ],
+      'uid' => [
+        'description' => "User uid.",
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+      'name' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'email' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'organism' => [
+        'description' => 'Organism.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'common_name' => [
+        'description' => 'common name for the species.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'description' => [
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => TRUE,
+      ],
+      'organism_image_url' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'default' => '',
+      ],
+      'is_curate_assembly' => [
+        'description' => 'Will you manually curate this assembly using i5k workspace tools?',
+        'type' => 'varchar',
+        'length' => 20,
+        'not null' => TRUE,
+      ],
+      'is_same' => [
+        'description' => 'Is the curation coordinator the same as the genome coordinator?',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'manual_curation_name' => [
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'manual_curation_email' => [
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'need_assistance' => [
+        'description' => 'Do you need assistance developing an Official Gene Set?',
+        'type' => 'varchar',
+        'length' => 20,
+      ],
+      'reason' => [
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'time_from' => [
+        'description' => 'Specify curation time frame - From date',
+        'type' => 'int',
+        'default' => 0,
+      ],
+      'time_to' => [
+        'description' => 'Specify curation time frame - to date',
+        'type' => 'int',
+        'default' => 0,
+      ],
+      'no_timeframe' => [
+        'descriptioni' => 'There is no set time frame for curation',
+        'type' => 'int',
+        'default' => 0,
+      ],
+      'assembly_name' => [
+        'description' => 'Assembly name',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'assembly_version' => [
+        'description' => 'Assembly Version ',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'assembly_accession' => [
+        'description' => 'NCBI/INSDC Genome Assembly accession #',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'assembly_method' => [
+        'description' => 'Analysis method',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'is_publish' => [
+        'description' => 'Is the assembly published?',
+        'type' => 'varchar',
+        'length' => 20,
+        'not null' => TRUE,
+      ],
+      'publish_field_data' => [
+        'description' => 'Is the assembly published? yes/no reason field',
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'other_notes' => [
+        'description' => 'other_notes',
+        'type' => 'text',
+        'size' => 'big',
+      ],
+      'geo_location' => [
+        'description' => 'Geo location',
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'tissues_located' => [
+        'description' => 'Tissues/Life stage included',
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'gender' => [
+        'description' => 'Sex',
+        'type' => 'varchar',
+        'length' => 20,
+      ],
+      'other_gender' => [
+        'description' => 'Other gender',
+        'type' => 'varchar',
+        'length' => 60,
+      ],
+      'data_source_strain' => [
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'data_source_notes' => [
+        'description' => 'other notes: data_source_notes',
+        'type' => 'text',
+        'size' => 'big',
+      ],
+      'data_source_seqplatform' => [
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'data_source_url' => [
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'filename' => [
+        'description' => 'filename',
+        'type' => 'text',
+        'size' => 'big',
+      ],
+      'md5sum' => [
+        'description' => 'md5sum',
+        'type' => 'text',
+        'size' => 'big',
+      ],
+      'sha512' => [
+        'description' => 'sha512',
+        'type' => 'text',
+        'size' => 'big',
+      ],
+      'created' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Timestamp for when user was created assembly data form.',
+      ],
+    ],
+    'primary key' => ['oa_id'],
+  ];
+
+  $schema['ds_gene_prediction'] = [
+    'description' => 'Organism assembly.',
+    'fields' => [
+      'pid' => [
+        'description' => 'Primary Key: Unique ID.',
+        'type' => 'serial',
+        'not null' => TRUE,
+      ],
+      'uid' => [
+        'description' => "User uid.",
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+      'organism' => [
+        'description' => 'Organism.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'program' => [
+        'description' => 'Analysis Method Program',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'version' => [
+        'description' => 'Analysis Method Version',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ],
+      'additional_info' => [
+        'description' => 'Additional Information',
+        'type' => 'text',
+        'size' => 'big',
+      ],
+      'other_methods' => [
+        'description' => 'In Analysis Method, Other methods',
+        'type' => 'text',
+        'size' => 'big',
+      ],
+      'name' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'email' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'affiliation' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'gene_name' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'gene_version' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'descriptive_track' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'is_ogs' => [
+        'description' => 'Is this an OGS?',
+        'type' => 'varchar',
+        'length' => 20,
+        'not null' => TRUE,
+      ],
+      'reason' => [
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'is_publish' => [
+        'description' => 'Is the assembly published?',
+        'type' => 'varchar',
+        'length' => 20,
+        'not null' => TRUE,
+      ],
+      'publish_field_data' => [
+        'description' => 'Is the assembly published? yes/no reason field',
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'is_download' => [
+        'description' => 'Should we make this file available for download in our Data Downloads section?',
+        'type' => 'varchar',
+        'length' => 20,
+      ],
+      'filename' => [
+        'description' => 'filename',
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => TRUE,
+      ],
+      'md5sum' => [
+        'description' => 'md5sum',
+        'type' => 'text',
+        'size' => 'big',
+      ],
+      'sha512' => [
+        'description' => 'sha512',
+        'type' => 'text',
+        'size' => 'big',
+      ],
+      'created' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Timestamp for when user was created assembly data form.',
+      ],
+    ],
+    'primary key' => ['pid'],
+  ];
+  $schema['ds_mapped_dataset'] = [
+    'description' => 'Organism assembly.',
+    'fields' => [
+      'id' => [
+        'description' => 'Primary Key: Unique ID.',
+        'type' => 'serial',
+        'not null' => TRUE,
+      ],
+      'uid' => [
+        'description' => "User uid.",
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+      'organism' => [
+        'description' => 'Organism.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'name' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'email' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'affiliation' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'geo_location' => [
+        'description' => 'Geo location',
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'tissues_located' => [
+        'description' => 'Tissues/Life stage included',
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'gender' => [
+        'description' => 'Sex',
+        'type' => 'varchar',
+        'length' => 20,
+      ],
+      'other_gender' => [
+        'description' => 'Other gender',
+        'type' => 'varchar',
+        'length' => 60,
+      ],
+      'sequence_platform' => [
+        'description' => 'Sequencing platform and version',
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'is_publish' => [
+        'description' => 'Is the assembly published?',
+        'type' => 'varchar',
+        'length' => 20,
+        'not null' => TRUE,
+      ],
+      'publish_field_data' => [
+        'description' => 'Is the assembly published? yes/no reason field',
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'descriptive_track' => [
+        'description' => 'Analysis Method descriptive track name',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'data_source_url' => [
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'program' => [
+        'description' => 'Analysis Method Program',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'version' => [
+        'description' => 'Analysis Method Version',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ],
+      'additional_info' => [
+        'description' => 'Additional Information',
+        'type' => 'text',
+        'size' => 'big',
+      ],
+      'other_methods' => [
+        'description' => 'In Analysis Method, Other methods',
+        'type' => 'text',
+        'size' => 'big',
+      ],
+      'filename' => [
+        'description' => 'filename',
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => TRUE,
+      ],
+      'md5sum' => [
+        'description' => 'md5sum',
+        'type' => 'text',
+        'size' => 'big',
+      ],
+      'sha512' => [
+        'description' => 'sha512',
+        'type' => 'text',
+        'size' => 'big',
+      ],
+      'created' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Timestamp for when user was created assembly data form.',
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
+
+  $schema['ds_submissions'] = [
+    'description' => 'Dataset submissions.',
+    'fields' => [
+      'oa_id' => [
+        'description' => 'Primary Key: Unique ID.',
+        'type' => 'serial',
+        'not null' => TRUE,
+      ],
+      'uid' => [
+        'description' => "User uid.",
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+      'name' => [
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'email' => [
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'organism' => [
+        'description' => 'Organism.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'affiliation' => [
+        'description' => '',
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'program' => [
+        'description' => 'Analysis Method Program',
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'version' => [
+        'description' => 'Analysis Method Version',
+        'type' => 'varchar',
+        'length' => 128,
+      ],
+      'additional_info' => [
+        'description' => 'Additional Information',
+        'type' => 'text',
+        'size' => 'big',
+      ],
+      'methods_citation' => [
+        'description' => 'In Analysis Method, Other methods',
+        'type' => 'text',
+        'size' => 'big',
+      ],
+      'dataset_name' => [
+        'description' => 'Dataset name',
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'dataset_version' => [
+        'description' => 'Dataset Version ',
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'is_download' => [
+        'description' => 'Should we make this file available for download in our Data Downloads section?',
+        'type' => 'varchar',
+        'length' => 20,
+      ],
+      'dataset_is_publish' => [
+        'description' => 'Is the dataset published?',
+        'type' => 'varchar',
+        'length' => 20,
+      ],
+      'dataset_publish_field_data' => [
+        'description' => 'Is the dataset published? yes/no reason field',
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'description' => [
+        'type' => 'text',
+        'size' => 'big',
+      ],
+      'organism_image_filename' => [
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'is_curate_assembly' => [
+        'description' => 'Will you manually curate this assembly using i5k workspace tools?',
+        'type' => 'varchar',
+        'length' => 20,
+      ],
+      'is_same' => [
+        'description' => 'Is the curation coordinator the same as the genome coordinator?',
+        'type' => 'int',
+        'default' => 0,
+      ],
+      'manual_curation_name' => [
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'manual_curation_email' => [
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'need_assistance' => [
+        'description' => 'Do you need assistance developing an Official Gene Set?',
+        'type' => 'varchar',
+        'length' => 20,
+      ],
+      'reason' => [
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'time_from' => [
+        'description' => 'Specify curation time frame - From date',
+        'type' => 'varchar',
+        'mysql_type' => 'datetime',
+        'default' => 0,
+      ],
+      'time_to' => [
+        'description' => 'Specify curation time frame - to date',
+        'type' => 'varchar',
+        'mysql_type' => 'datetime',
+        'default' => 0,
+      ],
+      'no_timeframe' => [
+        'description' => 'There is no set time frame for curation',
+        'type' => 'int',
+        'default' => 0,
+      ],
+      'assembly_geo_location' => [
+        'description' => 'Geo location',
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'assembly_tissues_located' => [
+        'description' => 'Assembly Tissues/Life stage included',
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'assembly_gender' => [
+        'description' => 'Sex',
+        'type' => 'varchar',
+        'length' => 20,
+      ],
+      'other_gender' => [
+        'description' => 'Other gender',
+        'type' => 'varchar',
+        'length' => 60,
+      ],
+      'data_source_strain' => [
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'other_notes' => [
+        'description' => 'other_notes',
+        'type' => 'text',
+        'size' => 'big',
+      ],
+      'data_source_notes' => [
+        'description' => 'other notes: data_source_notes',
+        'type' => 'text',
+        'size' => 'big',
+      ],
+      'data_source_seqplatform' => [
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'assembly_data_source_url' => [
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'assembly_accession' => [
+        'description' => 'NCBI/INSDC Genome Assembly accession #',
+        'type' => 'varchar',
+        'length' => 255,
+        // 'not null' => TRUE,
+      ],
+      'additional_other_notes' => [
+        'description' => 'additional_other_notes',
+        'type' => 'text',
+        'size' => 'big',
+      ],
+      'gene_set_descriptive_track' => [
+        'type' => 'varchar',
+        'length' => 255,
+        // 'not null' => TRUE,
+      ],
+      'is_ogs' => [
+        'description' => 'Is this an OGS?',
+        'type' => 'varchar',
+        'length' => 20,
+        // 'not null' => TRUE,
+      ],
+      // 'gene_set_is_publish' => array(
+      //     'description' => 'Is the gene set published?',
+      //     'type' => 'varchar',
+      //     'length' => 20,
+      //     // 'not null' => TRUE,
+      //   ),
+      // 'gene_set_publish_field_data' => array(
+      //     'description' => 'Is the gene set published? yes/no reason field',
+      //     'type' => 'varchar',
+      //     'length' => 255,
+      //   ),
+      'mapped_dataset_geo_location' => [
+        'description' => 'Mapped dataset Geo location',
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'mapped_dataset_tissues_located' => [
+        'description' => 'Tissues/Life stage included',
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'mapped_gender' => [
+        'description' => 'Sex',
+        'type' => 'varchar',
+        'length' => 20,
+      ],
+      'mapped_other_gender' => [
+        'description' => 'mapped other gender',
+        'type' => 'varchar',
+        'length' => 60,
+      ],
+      'sequence_platform' => [
+        'description' => 'Sequencing platform and version',
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'mapped_dataset_descriptive_track' => [
+        'type' => 'varchar',
+        'length' => 255,
+        // 'not null' => TRUE,
+      ],
+      'mapped_data_source_url' => [
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'filename' => [
+        'description' => 'filename',
+        'type' => 'text',
+        'size' => 'big',
+      ],
+      'md5sum' => [
+        'description' => 'md5sum',
+        'type' => 'text',
+        'size' => 'big',
+      ],
+      'sha512' => [
+        'description' => 'sha512',
+        'type' => 'text',
+        'size' => 'big',
+      ],
+      'dataset_type' => [
+        'description' => 'dataset_type',
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'created' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Timestamp for when user was created assembly data form.',
+      ],
+    ],
+    'primary key' => ['oa_id'],
+  ];
+
+  $schema['ds_cordinator_organism'] = [
+    'description' => 'some description',
+    'fields' => [
+      'genus' => [
+        'type' => 'varchar',
+        'length' => 20,
+        'not null' => TRUE,
+      ],
+      'species' => [
+        'type' => 'varchar',
+        'length' => 20,
+        'not null' => TRUE,
+
+      ],
+      'common_name' => [
+        'type' => 'varchar',
+        'length' => 20,
+      ],
+      'taxid' => [
+        'type' => 'int',
+        'not null' => TRUE,
+
+      ],
+      'coordinator_name' => [
+        'type' => 'varchar',
+        'length' => 20,
+        'not null' => TRUE,
+
+      ],
+      'email' => [
+        'type' => 'varchar',
+        'length' => 254,
+        'not null' => TRUE,
+
+      ],
+      'comments' => [
+        'type' => 'text',
+
+      ],
+      'status' => [
+        'type' => 'int',
+        'size' => 'small',
+        'default' => 2,
+        'not null' => TRUE,
+      ],
+      'created' => [
+        'type' => 'int',
+        'default' => 0,
+      ],
+    ],
+    'unique keys' => [
+      'taxid' => ['taxid'],
+    ],
+  ];
+
+  return $schema;
+}
+
+/**
+ * Implements of hook_uninstall().
+ */
+function datasets_uninstall() {
+  drupal_uninstall_schema('datasets');
+
+
+  //TODO: theres probably a drupal way to define sequence....
+  //$sql = "DROP SEQUENCE gene_prediction_pid_seq";
+
+  //db_query($sql);
+
+//  $sql = "DROP SEQUENCE mapped_dataset_id_seq";
+  //db_query($sql);
+
+}

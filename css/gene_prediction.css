@@ -1,0 +1,235 @@
+
+.upload_fieldset_wrapper {
+  width: 100%;
+}
+
+.f_class {
+  float: left;
+  min-width: 51%;
+}
+.m_class {
+  margin-left: 549px;
+  min-width: 48%;
+}
+
+#ogs {
+  position: relative;
+}
+
+#ogs label {
+  float: left;
+  min-width: 5%;
+  position: relative;
+  left: -10px;  
+}
+
+#ogs fieldset {
+  border: 0px;
+}
+
+.form-item-is-ogs {
+  clear: both;
+}
+
+#edit-add-other-uploads {
+  float: left;
+  clear: both;
+}
+#edit-remove-other-uploads {
+  float: left;
+}
+
+#entry-fieldset-wrapper fieldset {
+  width: 46%;
+}
+
+select#edit-organism  {
+  width: 37.5%;
+} 
+
+select#edit-reason {
+  width: 37.5%;
+}
+select#edit-is-ogs {
+  width: 37.5%;
+}
+
+select#edit-is-download {
+  width: 37.5%;
+}
+
+select#edit-is-publish {
+  width: 37.5%;
+}
+
+#publish fieldset {
+  border: 0px !important;
+}
+
+#publish  label {
+  width: 16% !important;
+}
+
+#gene-prediction fieldset,
+fieldset#edit-dataset-entry {
+  iborder: 1px solid #ddd !important;
+  padding: 0 1.4em 4px 1.4em !important;
+  margin: 0 0 1.5em 0 !important;
+  -webkit-box-shadow:  0px 0px 0px 0px;
+  box-shadow:  0px 0px 0px 0px;
+  -webkit-box-shadow: 0px;
+}
+
+
+fieldset.panel-default > legend.panel-heading {
+    display: block;
+  float: none;
+  background: none;
+  width: inherit;
+  border-bottom: none;
+}
+
+#ogs fieldset {
+  border: 0px !important;
+}
+
+
+#edit-gene-set label,
+#edit-analysis-provider label {
+  float: left;
+  width: 17%;
+}
+
+#edit-analysis-method label {
+  float: left;
+  min-width: 14%;
+}
+#edit-analysis-method .grippie {
+  margin-left: 154.2px !important;
+}
+
+.form-item-organism label {
+  float: left;
+  min-width: 10%;
+}
+
+.form-item-reason {
+  position: relative;
+  left: -17px;
+}
+
+.form-required {
+  color: red;
+}
+
+.captcha {
+  position: relative;
+  left: -85px;
+  width: 31%;
+}
+
+.captcha > label {
+  float: left;
+}
+
+.form-item-captcha-response > input {
+  float: left;
+  position: relative;
+  left: 254px;
+}
+
+#info_markup {
+  font-style: italic;
+  font-weight: 200;
+  font-size: 1.3em;
+  margin-bottom: 14px;
+}
+
+
+#edit-gene-set .form-item-is-download {
+  margin-bottom: 0px;
+}
+
+#edit-gene-set #download_css {
+  font-weight: bold; 
+}
+
+#files_markup {
+  font-family: Arial, sans-serif;
+  font-weight: 600;
+}
+.assembly  label {
+  float: left;
+  width: 19%;
+}
+fieldset.cordinator_info,
+fieldset.project,
+fieldset.project_info,
+fieldset.assembly,
+fieldset.assembly_data_source,
+fieldset.aa_information,
+#edit-assembly > fieldset  {
+  border: 1px solid #ddd !important;
+  padding: 0 1.4em 4px 1.4em !important;
+  margin: 0 0 1.5em 0 !important;
+  -webkit-box-shadow:  0px 0px 0px 0px;
+  box-shadow:  0px 0px 0px 0px;
+  -webkit-box-shadow: 0px;
+}
+fieldset.panel-default > legend.panel-heading {
+    display: block;
+  float: none;
+  background: none;
+  width: inherit;
+  border-bottom: none;
+}
+
+
+/*
+.f_class label {
+  margin-right: 10px;
+  float: left;
+  min-width: 10%;
+}
+
+.m_class label {
+  float: left;
+  min-width: 10%;
+}*/
+
+
+@media (max-width: 1225px) {
+  .m_class {
+    margin-left: 0px;
+    float: left;
+    min-width: 100%;
+  }
+  .f_class {
+    float: left;
+    min-width: 100%;
+  }
+  .captcha {
+    position: relative;
+    left: -85px;
+    width: 100%;
+  }
+  #edit-gene-set label {
+    float: left;
+    width: 100% !important;
+  }
+  #publish {
+    margin-left: -9px;
+  }
+
+  .f_class .form-item > input {
+    width: 100%;
+  }
+  .m_class .form-item > input {
+    width: 100%;
+  }
+}
+
+
+}
+
+

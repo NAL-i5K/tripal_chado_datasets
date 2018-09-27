@@ -1,0 +1,192 @@
+#edit-data-provider,
+#edit-analysis-method,
+#edit-upload {
+  width: 88%;
+}
+.form-item-organism label,
+.form-item-name label,
+.form-item-email label,
+.form-item-affiliation label,
+.form-item-geo-location label,
+.form-item-tissues-located label,
+.form-item-gender label,
+.form-item-sequence-platform label,
+.form-item-descriptive-track label,
+.form-item-data-source-url label,
+.form-item-program label,
+.form-item-version label,
+.form-item-additional-info label,
+.form-item-publish-field-data label {
+  float: left;
+  width: 15.5%;
+}
+
+#edit-organism,
+#edit-is-publish,
+#edit-gender {
+  width: 35.3%;
+}
+
+.form-item-geo-location {
+  padding-top: 4px;
+}
+
+.form-item-is-publish label {
+  float: left;
+  width: 15.5%;
+  clear: both;  
+}
+
+#entry-fieldset-wrapper fieldset {
+  width: 68%;
+}
+
+#publish {
+  position: relative;
+}
+.form-item-publish-publish-field-data label {
+  float: left;
+  width: 16%;
+}
+
+#publish fieldset {
+  border: 0;
+}
+
+.upload_fieldset_wrapper {
+  width: 100%;
+}
+
+.f_class {
+  float: left;
+  min-width: 51%;
+}
+.m_class {
+  margin-left: 549px;
+  min-width: 48%;
+}
+.gender_wrapper {
+  width: 100%;
+}
+.gender_wrapper .form-item-gender {
+  width: 43%;
+}
+.gender_wrapper label {
+  margin-right: 19%;
+}
+
+#gender_textfield label {
+  float: left;
+  position: relative;
+  left: -10px;
+  width: 15%;
+}
+#gender_textfield fieldset {
+  border: 0;
+}
+
+.captcha {
+  display: 0px;
+  position: relative;
+  left: -85px;
+  width: 31%;
+}
+
+.captcha > label {
+  float: left;
+}
+
+.form-item-captcha-response > input {
+  float: left;
+  position: relative;
+  left: 254px;
+}
+
+#mapped-dataset select {
+  width: 35.3%;
+}
+
+#mapped-dataset fieldset {
+  border: 1px solid #ddd !important;
+  padding: 0 1.4em 4px 1.4em !important;
+  margin: 0 0 1.5em 0 !important;
+  -webkit-box-shadow:  0px 0px 0px 0px;
+  box-shadow:  0px 0px 0px 0px;
+  -webkit-box-shadow: 0px;
+}
+
+
+fieldset.panel-default > legend.panel-heading {
+    display: block;
+  float: none;
+  background: none;
+  width: inherit;
+  border-bottom: none;
+}
+
+#gender_textfield fieldset,
+#publish fieldset {
+  border: 0px !important;
+  margin: 0px;
+  padding: 0px;
+}
+
+#gender_textfield fieldset > div {
+  margin-left: -5px;
+}
+
+#publish fieldset > div {
+  margin-left: -9px;
+}
+
+
+.form-required {
+  color: red;
+}
+
+#files_markup {
+  font-family: Arial, sans-serif;
+  font-weight: 600;
+}
+
+.assembly  label {
+  float: left;
+  width: 19%;
+}
+
+@media (max-width: 1225px) {
+  .m_class {
+    margin-left: 0px;
+    float: left;
+    min-width: 100%;
+  }
+  .f_class {
+    float: left;
+    min-width: 100%;
+  }
+  .captcha {
+    position: relative;
+    left: -85px;
+    width: 100%;
+  }
+  #edit-analysis-method label {
+    float: left;
+    width: 100%;
+  }
+  .f_class .form-item > input {
+    width: 100%;
+  }
+  .m_class .form-item > input {
+    width: 100%;
+  }
+  .form-item-is-publish label {
+    width: 100%;
+  }   
+
+ .form-item-organism label, .form-item-name label, .form-item-email label, .form-item-affiliation label, .form-item-geo-location label, .form-item-tissues-located label, .form-item-gender label, .form-item-sequence-platform label, .form-item-descriptive-track label, .form-item-data-source-url label, .form-item-program label, .form-item-version label, .form-item-additional-info label, .form-item-publish-field-data label {
+    float: left;
+    width: 100%;
+}
+  
+}
+
