@@ -30,6 +30,7 @@ function datasets_menu() {
   $items = [];
 
 
+  //Form to request a chado ANALYSIS
   $items['datasets/submit-a-dataset'] = [
     'title' => 'Add Mapped dataset, Genome assembly, Gene Prediction Information',
     'page callback' => 'drupal_get_form',
@@ -78,6 +79,7 @@ function datasets_menu() {
     'file' => 'includes/datasets.admin.inc',
   ];
 
+  //Form to request creating a chado organism.
   $items['datasets/request-project'] = [
     'title' => 'Genome project initial inquiry form',
     'page callback' => 'drupal_get_form',

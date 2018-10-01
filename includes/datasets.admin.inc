@@ -180,48 +180,71 @@ function datasets_organism_approval_submit($form, &$form_state) {
      ***********************************************************
      * INSERT the approved request project 'organism' into  chado .*/
 
-    //TODO: its done this way because it publishes the content.  Instead it should be inserted into Chado and published--> this will make it Tripal 2/3 agnostic.
+    //Tripal 2 way
 
-    $node = new stdClass();
-    $node->type = "chado_organism";
-    $node->language = "und";
-    $node->title = $values['genus'] . " " . $values['species'];
-    $node->uid = 1;
-    $node->status = 0;
-    $node->created = time();
-    $node->changed = time();
-    $node->promote = 0;
+    if (function_exists('chado_get_id_from_nid')) {
+
+      $node = new stdClass();
+      $node->type = "chado_organism";
+      $node->language = "und";
+      $node->title = $values['genus'] . " " . $values['species'];
+      $node->uid = 1;
+      $node->status = 0;
+      $node->created = time();
+      $node->changed = time();
+      $node->promote = 0;
 
 
-    $node->genus = trim($values['genus']);
-    $node->species = trim($values['species']);
-    $node->abbreviation = $node->genus[0] . " . " . $node->species; //trim($data->abbreviation);
-    $node->common_name = trim($values['common_name']);
-    $node->description = trim($values['description']);
+      $node->genus = trim($values['genus']);
+      $node->species = trim($values['species']);
+      $node->abbreviation = $node->genus[0] . " . " . $node->species; //trim($data->abbreviation);
+      $node->common_name = trim($values['common_name']);
+      $node->description = trim($values['description']);
 
-    node_save($node);
+      node_save($node);
 
-    $organism_id = $node->organism->organism_id;
-    $check_org_id = chado_get_id_from_nid('organism', $node->nid);
-    if (!$check_org_id) {
-      $record = new stdClass();
-      $record->nid = $node->nid;
-      $record->vid = $node->vid;
-      $record->organism_id = $organism_id;
-      // drupal_write_record('chado_organism', $record);
+      $organism_id = $node->organism->organism_id;
+      $check_org_id = chado_get_id_from_nid('organism', $node->nid);
+      if (!$check_org_id) {
+        $record = new stdClass();
+        $record->nid = $node->nid;
+        $record->vid = $node->vid;
+        $record->organism_id = $organism_id;
+
+      }
     }
-    // Adding the new approved organism to the datasets settings textarea - admin/structure/webapollo/settings.
 
-    //      $web_apollo_organism = variable_get('web_apollo_organism');
-    //      $web_apollo_organism = $web_apollo_organism . "\n";
-    //      $organism_shortcut = strtolower(substr($values['genus'], 0, 3) . substr($values['species'], 0, 3));
-    //      $web_apollo_organism .= $organism_shortcut . '|' . $values['genus'] . ' ' . $values['species'] . '|0';
-    //
-    //      variable_set('web_apollo_organism', $web_apollo_organism);
+    //Tripal 3
+    else {
+
+      $genus = trim($values['genus']);
+      $species = trim($values['species']);
+      $abbreviation = $genus[0] . ". " . $species;
+      $common_name = trim($values['common_name']);
+      $description = trim($values['description']);
+
+      $values = [
+        'abbreviation' => $abbreviation,
+        'genus' => $genus,
+        'species' => $species,
+        'common_name' => $common_name,
+        'comment' => $description,
+      ];
+      $options = [];
+      $record = chado_insert_record('organism', $values, $options);
+
+      if ($record) {
+        tripal_set_message(t('Organism created.  Please run publish for organism entities.'), TRIPAL_NOTICE);
+
+      }
+      else {
+        tripal_set_message(t('Error creating organism!', TRIPAL_ERROR));
+      }
+    }
+
 
     /*******************************************************************************************
      *******************************************************************************************/
-    //}
     //Displaying status message on the site
     $status = ($status == 1) ? 'Approved' : 'Rejected';
     drupal_set_message(t('%genus %species status was changed to %status'), [
