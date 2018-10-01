@@ -236,11 +236,6 @@ function tripal_chado_datasets_request_form($form, &$form_state) {
   ];
   global $base_url;
   global $base_path;
-  $form['assembly']['project']['organism_image_filename'] = [
-    '#type' => 'textfield',
-    '#title' => t('Image file name for your organism page ') . '<a href="' . $base_url . '/image_permission/new" target="_blank" >' . t('(image submission form)') . '</a>',
-    // '#description' => t("Provide the image url"),
-  ];
 
   $curate_options = ['' => '-Select-', 'Yes' => 'Yes', 'No' => 'No'];
   $form['assembly']['project']['is_curate_assembly'] = [
@@ -887,7 +882,6 @@ function tripal_chado_datasets_request_form_validate($form, &$form_state) {
   // }
 
   $assembly_fields = [
-    'organism_image_filename',
     'assembly_geo_location',
     'assembly_tissues_located',
     'assembly_gender',
@@ -967,7 +961,6 @@ function tripal_chado_datasets_request_form_submit($form, &$form_state) {
   $organism_list = chado_get_organism_select_options(FALSE);
 
   $assembly_fields = [
-    'organism_image_filename',
     'assembly_geo_location',
     'assembly_tissues_located',
     'assembly_gender',

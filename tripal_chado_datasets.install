@@ -687,10 +687,7 @@ function tripal_chado_datasets_schema() {
         'type' => 'text',
         'size' => 'big',
       ],
-      'organism_image_filename' => [
-        'type' => 'varchar',
-        'length' => 255,
-      ],
+
       'is_curate_assembly' => [
         'description' => 'Will you manually curate this assembly using i5k workspace tools?',
         'type' => 'varchar',
@@ -930,6 +927,17 @@ function tripal_chado_datasets_schema() {
   ];
 
   return $schema;
+}
+
+
+/**
+ * Drop the organism_image_filename field from the ds_submissions table.
+ */
+function tripal_chado_datasets_update_7000(){
+
+  if (db_field_exists('ds_submissions', 'organism_image_filename')) {
+    db_drop_field('ds_submissions', 'organism_image_filename');
+  }
 }
 
 /**

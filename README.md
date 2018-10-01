@@ -34,7 +34,7 @@ Steps: for New Organism
    To request go to url: http://domain_url/datasets/request-project
 2. Once the user submitted the request organism, an email goes to administrator.
 3. Administrator checks and sees if the organism is worth to approve/reject.
-4. An email goes to the requested user about the organism approval if it is approved. If rejected he wont   receives and email.
+4. An email goes to the requested user about the organism approval if it is approved. If rejected he wont  receives and email.
 
 ## Dependencies
 the below modules will be installed when enabling datasets:
@@ -42,11 +42,8 @@ the below modules will be installed when enabling datasets:
 1. Date module
 2. honeypot module
 
+create a "datasets" folder for organism image under sites/default/files/
 
-
-TODO: handle this on install
->create a "datasets" folder for organism image under sites/default/files/
-TODO: handle this on install
 4. create db_tables in databse.
 
 
