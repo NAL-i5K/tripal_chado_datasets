@@ -1,9 +1,9 @@
-name = Datasets form
+name = Tripal Dataset Forms
 description = Form to fill datasets data and put them into flat files
 package = Custom
 version = 7.x-1.0
 core = 7.x
-project = datasets
+project = tripal_chado_datasets
 
 dependencies[] = tripal
 dependencies[] = date

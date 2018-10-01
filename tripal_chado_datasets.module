@@ -7,9 +7,9 @@
 
 
 //TODO: Review what forms needs to be included
-require_once 'includes/datasets_submission.form.inc';
-require_once 'includes/datasets.admin.inc';
-require_once 'includes/datasets_mail.inc';
+require_once 'includes/tripal_chado_datasets_submission.form.inc';
+require_once 'includes/tripal_chado_datasets.admin.inc';
+require_once 'includes/tripal_chado_datasets_mail.inc';
 
 
 define('FROM_ADDRESS', '"NAL-i5k"<i5k@ars.usda.gov>');
@@ -39,7 +39,7 @@ function datasets_menu() {
     'access arguments' => ['access datasets'],
     'type' => MENU_CALLBACK,
     'weight' => 100,
-    'file' => 'includes/datasets_submission.form.inc',
+    'file' => 'includes/tripal_chado_datasets_submission.form.inc',
     'file_path' => drupal_get_path('module', 'datasets'),
   ];
 
@@ -49,7 +49,7 @@ function datasets_menu() {
     'page arguments' => [1],
     'access arguments' => ['administer datasets'],
     'type' => MENU_CALLBACK,
-    'file' => 'includes/datasets.admin.inc',
+    'file' => 'includes/tripal_chado_datasets.admin.inc',
   ];
 
   $items['datasets_og/%/delete'] = [
@@ -58,7 +58,7 @@ function datasets_menu() {
     'page arguments' => ['datasets_og_delete_form', 1],
     'access arguments' => ['administer datasets'],
     'type' => MENU_CALLBACK,
-    'file' => 'includes/datasets.admin.inc',
+    'file' => 'includes/tripal_chado_datasets.admin.inc',
   ];
 
   $items['datasets/organism/%/edit'] = [
@@ -67,7 +67,7 @@ function datasets_menu() {
     'page arguments' => ['datasets_organism_approval', 2],
     'access arguments' => ['administer datasets'],
     'type' => MENU_CALLBACK,
-    'file' => 'includes/datasets.admin.inc',
+    'file' => 'includes/tripal_chado_datasets.admin.inc',
   ];
 
   $items['datasets/dataimport'] = [
@@ -76,7 +76,7 @@ function datasets_menu() {
     'page arguments' => [1],
     'access arguments' => ['administer datasets'],
     'type' => MENU_CALLBACK,
-    'file' => 'includes/datasets.admin.inc',
+    'file' => 'includes/tripal_chado_datasets.admin.inc',
   ];
 
   //Form to request creating a chado organism.
@@ -88,7 +88,7 @@ function datasets_menu() {
     'access arguments' => ['access datasets'],
     'type' => MENU_CALLBACK,
     'weight' => 100,
-    'file' => 'includes/datasets_request_project.form.inc',
+    'file' => 'includes/tripal_chado_datasets_request_project.form.inc',
     'file_path' => drupal_get_path('module', 'datasets'),
   ];
 
@@ -100,7 +100,7 @@ function datasets_menu() {
     'access arguments' => ['access register form'],
     'type' => MENU_CALLBACK,
     'weight' => 100,
-    'file' => 'includes/datasets_project_dataset_submission_account.form.inc',
+    'file' => 'includes/tripal_chado_datasets_project_dataset_submission_account.form.inc',
     'file_path' => drupal_get_path('module', 'datasets'),
   ];
 
@@ -113,7 +113,7 @@ function datasets_menu() {
     'description' => t('List of Organism\'s for approve/reject'),
     'page callback' => 'dataset_cordinator_organisms',
     'access arguments' => ['administer datasets'],
-    'file' => 'includes/datasets.admin.inc',
+    'file' => 'includes/tripal_chado_datasets.admin.inc',
     'file_path' => drupal_get_path('module', 'datasets'),
   ];
 
@@ -130,7 +130,7 @@ function datasets_menu() {
     'page arguments' => ['dataset_report'],
     'access arguments' => ['administer datasets'],
     'type' => MENU_LOCAL_TASK,
-    'file' => 'includes/datasets.admin.inc',
+    'file' => 'includes/tripal_chado_datasets.admin.inc',
   ];
 
   return $items;
