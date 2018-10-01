@@ -6,9 +6,17 @@
 
 function tripal_chado_datasets_request_form($form, &$form_state) {
 
-  $form['information_markup'] = [
-    '#markup' => t('<div id="text">Please note that this dataset will be visible to the public in the JBrowse genome browser. Contact us if this dataset needs to remain private. Refer to our <a href="' . $GLOBALS['base_url'] . '/data-management-policy">data management</a> and <a href="' . $GLOBALS['base_url'] . '/long-term-i5k-workspace-project-management">long-term management policy</a> documents for information about the data types that we store and our long-term data management policy.</div><br>'),
-  ];
+
+
+
+  //i5k specific code.
+  $link = $GLOBALS['base_url'] . '/long-term-i5k-workspace-project-management';
+  if (drupal_valid_path($link)) {
+    $form['information_markup'] = [
+      '#markup' => t('<div id="text">Please note that this dataset will be visible to the public in the JBrowse genome browser. Contact us if this dataset needs to remain private. Refer to our <a href="' . $GLOBALS['base_url'] . '/data-management-policy">data management</a> and <a href="' . $GLOBALS['base_url'] . '/long-term-i5k-workspace-project-management">long-term management policy</a> documents for information about the data types that we store and our long-term data management policy.</div><br>'),
+    ];
+  }
+
 
   $form['data_provider'] = [
     '#type' => 'fieldset',
@@ -237,7 +245,7 @@ function tripal_chado_datasets_request_form($form, &$form_state) {
   $curate_options = ['' => '-Select-', 'Yes' => 'Yes', 'No' => 'No'];
   $form['assembly']['project']['is_curate_assembly'] = [
     '#type' => 'select',
-    '#title' => t('Will you manually curate this assembly using i5k workspace tools?'),
+    '#title' => t('Will you manually curate this assembly using our tools?'),
     '#options' => $curate_options,
     '#ajax' => [
       'callback' => 'tripal_chado_manual_curation_dropdown_callback',

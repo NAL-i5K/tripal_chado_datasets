@@ -10,9 +10,16 @@ function tripal_chado_datasets_request_project($form, &$form_state) {
   $form['#attached']['css'] = [
     drupal_get_path('module', 'tripal_chado_datasets') . '/css/request_project.css',
   ];
-  $form['header_text'] = [
-    '#markup' => '<div id="text">Thank you for your interest in submitting your genome project to the i5k Workspace! Please answer the following questions to help us decide if the resources at the i5k Workspace are a good fit for your project. Refer to our <a href="' . $GLOBALS['base_url'] . '/data-management-policy">data management</a> and <a href="' . $GLOBALS['base_url'] . '/long-term-i5k-workspace-project-management">long-term management policy</a> documents for information about the data types that we store and our long-term data management policy.</div>',
-  ];
+
+
+  //i5k specific code.
+  $link = $GLOBALS['base_url'] . '/long-term-i5k-workspace-project-management';
+  if (drupal_valid_path($link)) {
+    $form['header_text'] = [
+      '#markup' => '<div id="text">Thank you for your interest in submitting your genome project to the i5k Workspace! Please answer the following questions to help us decide if the resources at the i5k Workspace are a good fit for your project. Refer to our <a href="' . $GLOBALS['base_url'] . '/data-management-policy">data management</a> and <a href="' . $GLOBALS['base_url'] . '/long-term-i5k-workspace-project-management">long-term management policy</a> documents for information about the data types that we store and our long-term data management policy.</div>',
+    ];
+  }
+
 
   $form['genus'] = [
     '#type' => 'textfield',
@@ -70,7 +77,7 @@ function tripal_chado_datasets_request_project($form, &$form_state) {
   $form['is_assembly'] = [
     '#type' => 'select',
     '#options' => $assembly_options,
-    '#title' => t('Is this a re-assembly or new assembly of an existing i5k Workspace organism ?'),
+    '#title' => t('Is this a re-assembly or new assembly of an existing organism on this site?'),
     '#default_value' => $assembly_selected,
     '#required' => TRUE,
   ];
@@ -92,7 +99,7 @@ function tripal_chado_datasets_request_project($form, &$form_state) {
 
   $form['description'] = [
     '#type' => 'textarea',
-    '#title' => t('Briefly describe your plans for this genome project at the i5k Workspace (e.g. are you interested in community curation?).'),
+    '#title' => t('Briefly describe your plans for this genome project (e.g. are you interested in community curation?).'),
     '#required' => TRUE,
   ];
 
@@ -185,7 +192,7 @@ function tripal_chado_datasets_request_project_submit($form, &$form_state) {
   $sent = drupal_mail('tripal_chado_datasets', 'request_project_email', $recipient, language_default(), $data, $from, TRUE);
   if (empty($sent['result']) || ($sent['result'] != 1)) {
     /*handle send fail, $sent ===false when mail fails, but it won't always recognize a failure*/
-    drupal_set_message(t('Failed to send e-mail to the i5k admin.'));
+    drupal_set_message(t('Failed to send e-mail to the admin.'));
   }
   else {
     drupal_set_message(t('Your Project Request %genus was successfully created. You will receive an email once your request is approved by an administrator.'), [
