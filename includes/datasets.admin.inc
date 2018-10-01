@@ -180,7 +180,6 @@ function datasets_organism_approval_submit($form, &$form_state) {
      ***********************************************************
      * INSERT the approved request project 'organism' into  chado .*/
 
-
     //Tripal 2 way
 
     if (function_exists('chado_get_id_from_nid')) {
@@ -215,13 +214,11 @@ function datasets_organism_approval_submit($form, &$form_state) {
       }
     }
 
-    //Tripal 3 way
-    //TODO:  Instead, let's check of the organism entity content type is defined, and if so use that (IE tripal 3 is setup for organism)
+    //Tripal 3
     else {
 
       $genus = trim($values['genus']);
       $species = trim($values['species']);
-      $uid = 1;
       $abbreviation = $genus[0] . ". " . $species;
       $common_name = trim($values['common_name']);
       $description = trim($values['description']);
@@ -246,11 +243,8 @@ function datasets_organism_approval_submit($form, &$form_state) {
     }
 
 
-    // Adding the new approved organism to the datasets settings textarea - admin/structure/webapollo/settings.
-
     /*******************************************************************************************
      *******************************************************************************************/
-    //}
     //Displaying status message on the site
     $status = ($status == 1) ? 'Approved' : 'Rejected';
     drupal_set_message(t('%genus %species status was changed to %status'), [

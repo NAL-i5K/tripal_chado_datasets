@@ -38,7 +38,13 @@ the below modules will be installed when enabling datasets:
 2. honeypot module
 
 
+
 TODO: handle this on install
 >create a "datasets" folder for organism image under sites/default/files/
 TODO: handle this on install
 4. create db_tables in databse.
+
+
+# Admin usage
+
+Currently, if running a Tripal 3 site, organism records will be inserted into Chado after approving a request at `admin/structure/datasets` in the "Request Project List" tab.  They will not be available to users until they are **published**.  Visit `admin -> Content Types -> Tripal Content types -> Publish` after approving an organism to publish it.
