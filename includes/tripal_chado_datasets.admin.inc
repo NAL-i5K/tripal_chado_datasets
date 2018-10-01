@@ -16,7 +16,7 @@
  *
  * @param $id = ds_request_project.id
  */
-function datasets_organism_approval($form, &$form_state, $id) {
+function tripal_chado_datasets_organism_approval($form, &$form_state, $id) {
   $header = [];
   drupal_add_js(drupal_get_path('module', 'tripal_chado_datasets') . '/js/organism_approval_status.js');
 
@@ -45,7 +45,7 @@ function datasets_organism_approval($form, &$form_state, $id) {
   $form['datasets_table'] = [
     '#tree' => TRUE, // Need this for easy submit processing
     '#header' => $header, // We trick Drupal to pass our $header to theme here
-    '#theme' => 'datasets_organism_approval',
+    '#theme' => 'tripal_chado_datasets_organism_approval',
   ];
   $form['datasets_table']['fullname'] = [
     '#type' => 'value',
@@ -136,7 +136,7 @@ function datasets_organism_approval($form, &$form_state, $id) {
  *
  * @sends an email to user regarding login credentials to the web apollo site.
  */
-function datasets_organism_approval_submit($form, &$form_state) {
+function tripal_chado_datasets_organism_approval_submit($form, &$form_state) {
   $values = $form_state['values']['datasets_table'];
   $status = $values['status'];
   $id = $values['id'];
@@ -158,7 +158,7 @@ function datasets_organism_approval_submit($form, &$form_state) {
       ->condition('id', $id, '=')
       ->execute();
     //   Send email to the user about the login credentials to the web apollo site
-    $user_email_sent = drupal_mail('datasets', 'request_project_approved_email', $to, language_default(), $values, $from, TRUE);
+    $user_email_sent = drupal_mail('tripal_chado_datasets', 'request_project_approved_email', $to, language_default(), $values, $from, TRUE);
 
     // $is_species_exists = db_select('chado.organism', 'o')->fields('o', array('organism_id'))->condition('o.genus', $genus, 'LIKE')->condition('o.species', $species, 'LIKE')->execute()->fetchField();
     $sql = "SELECT o.organism_id  
@@ -314,7 +314,7 @@ function datasets_organism_approval_submit($form, &$form_state) {
 /**
  * Form at admin/structure/datasets/report
  */
-function dataset_report($form, &$form_state) {
+function tripal_chado_datasets_report($form, &$form_state) {
   $organism_options = chado_get_organism_select_options(FALSE);
 
   $organism_selected = 0;
@@ -342,17 +342,17 @@ function dataset_report($form, &$form_state) {
     '#default_value' => $organism_selected,
     '#description' => t('If no organism is selected it shows by default all organism data.'),
     '#ajax' => [
-      'callback' => 'report_callback',
+      'callback' => 'tripal_chado_datasets_report_callback',
       'wrapper' => 'report',
     ],
   ];
 
   $rows = [];
   if (isset($organism_selected)) {
-    $rows = datasets_list_all_submissions($organism_selected);
+    $rows = tripal_chado_datasets_list_all_submissions($organism_selected);
   }
   else {
-    $rows = datasets_list_all_submissions();
+    $rows = tripal_chado_datasets_list_all_submissions();
   }
 
   // Prepare table header
@@ -410,7 +410,7 @@ function dataset_report($form, &$form_state) {
   // Show the pager
   //$output .= theme('pager', array('quantity',count($rows)));
 
-  $output = theme_datasets_table(
+  $output = tripal_chado_datasets_theme_datasets_table(
     [
       "header" => $header,
       "rows" => $chunks[$current_page],
@@ -448,22 +448,8 @@ function dataset_report($form, &$form_state) {
   return $form;
 }
 
-function datasets_report_submit($form, &$form_state) {
+function tripal_chado_datasets_report_submit($form, &$form_state) {
   $form_state['rebuild'] = TRUE;
-}
-
-class DsTableSort extends TableSort {
-
-  /**
-   * Compose a URL query parameter array for table sorting links.
-   *
-   * @return
-   *   A URL query parameter array that consists of all components of the
-   *   current page request except for those pertaining to table sorting.
-   */
-  public function tablesort_get_query_parameters() {
-    return drupal_get_query_parameters($_GET, ['q', 'sort', 'order', 'nid']);
-  }
 }
 
 /**
@@ -476,7 +462,7 @@ class DsTableSort extends TableSort {
  * @return array
  */
 
-function datasets_list_all_submissions($organism = NULL) {
+function tripal_chado_datasets_list_all_submissions($organism = NULL) {
 
   $sort = 'DESC';
   $order = 'name';
@@ -529,7 +515,10 @@ function datasets_list_all_submissions($organism = NULL) {
   return $rows;
 }
 
-function datasets_md_delete_form($form, &$form_state, $item) {
+/**
+ * TODO: is this form ever used?
+ */
+function tripal_chado_datasets_md_delete_form($form, &$form_state, $item) {
   $form['#item'] = $item;
   // Note confirm_form() can be used here, but I prefer to use my own for styling purposes
   $form['header'] = [
@@ -549,7 +538,7 @@ function datasets_md_delete_form($form, &$form_state, $item) {
   return $form;
 }
 
-function datasets_md_delete_form_submit($form, &$form_state) {
+function tripal_chado_datasets_md_delete_form_submit($form, &$form_state) {
   if ($form_state['values']['op'] == $form_state['values']['delete_button']) {
     $item = $form['#item'];
     db_delete('ds_mapped_dataset')
@@ -623,12 +612,12 @@ function datasets_og_delete_form_submit($form, &$form_state) {
 }
 
 
-function report_callback($form, $form_state) {
+function tripal_chado_datasets_report_callback($form, $form_state) {
   return $form['result'];
 }
 
 
-function datasets_information_import() {
+function tripal_chado_datasets_information_import() {
   $output = "";
 
   // db_query("INSERT INTO {public.ds_gene_prediction} (pid, uid, organism, program, version, additional_info, other_methods, name, email, affiliation, gene_name, gene_version, descriptive_track, is_ogs, reason, is_publish, publish_field_data, is_download, filename, md5sum, sha512, created) VALUES (1, 768, 'blager', 'Maker', '2.31.8', NULL, '', 'Evelien Jongepier', 'e.jongepier@uni-muenster.de', 'Westfaelische Wilhelms-University - Institute for Evolution and Biodiversity - Evolutionary Bioinformatics Group', 'BGER_v0.6.2', '0.6.2', 'BGER_v0.6.2-Models', 'No', NULL, 'No', 'Yes', 'Yes', 'BGER_v0.6.2.gff', '5201aa3ff85506bd8a2713f29336ba92', NULL, 1480083060)");
@@ -775,7 +764,7 @@ function datasets_information_import() {
  *
  * @return string
  */
-function dataset_cordinator_organisms() {
+function tripal_chado_datasets_dataset_coordinator_organisms() {
   $output = "";
 
   if (isset($_GET['sort']) && isset($_GET['order'])) {

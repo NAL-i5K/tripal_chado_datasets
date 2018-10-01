@@ -5,7 +5,7 @@
  * - Creates add organism form
  * - Save the data in public schema cordinator_organism table
  */
-function request_project($form, &$form_state) {
+function tripal_chado_datasets_request_project($form, &$form_state) {
 
   $form['#attached']['css'] = [
     drupal_get_path('module', 'tripal_chado_datasets') . '/css/request_project.css',
@@ -126,7 +126,7 @@ function request_project($form, &$form_state) {
  * Email validation
  * taxid is unique for each organism
  */
-function request_project_validate($form, &$form_state) {
+function tripal_chado_datasets_request_project_validate($form, &$form_state) {
   if (!valid_email_address($form_state['values']['email'])) {
     form_set_error('email', t('You must enter a valid e-mail address.'));
   }
@@ -149,9 +149,8 @@ function request_project_validate($form, &$form_state) {
  * hook_form_submit
  *
  */
-function request_project_submit($form, &$form_state) {
+function tripal_chado_datasets_request_project_submit($form, &$form_state) {
   $values = $form_state['values'];
-  // echo "<pre>"; print_r($values);echo "</pre>";exit;
 
   $created = time();
   // data variable is used to send values to mail message
@@ -175,7 +174,7 @@ function request_project_submit($form, &$form_state) {
   //Send the e-mail to the recipients using the site default language.
   $to_user = $values['email'];
   $from_address = FROM_ADDRESS;
-  $send_user = drupal_mail('datasets', 'email_acknowledgement_touser', $to_user, language_default(), $data, $from_address, TRUE);
+  $send_user = drupal_mail('tripal_chado_datasets', 'email_acknowledgement_touser', $to_user, language_default(), $data, $from_address, TRUE);
   if (empty($send_user['result']) || ($send_user['result'] != 1)) {
     drupal_set_message(t('Failed to send e-mail to the submitted user.'));
   }
@@ -183,7 +182,7 @@ function request_project_submit($form, &$form_state) {
   //Send email to the admin - when user submitted the data.
   $recipient = FROM_ADDRESS;
   $from = $values['email'];
-  $sent = drupal_mail('datasets', 'request_project_email', $recipient, language_default(), $data, $from, TRUE);
+  $sent = drupal_mail('tripal_chado_datasets', 'request_project_email', $recipient, language_default(), $data, $from, TRUE);
   if (empty($sent['result']) || ($sent['result'] != 1)) {
     /*handle send fail, $sent ===false when mail fails, but it won't always recognize a failure*/
     drupal_set_message(t('Failed to send e-mail to the i5k admin.'));

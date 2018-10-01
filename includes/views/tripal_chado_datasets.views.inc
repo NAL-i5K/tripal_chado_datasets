@@ -1,29 +1,30 @@
+<?php
+
 /**
  * @file
  * Install, update, and uninstall functions for the Foo Bar module.
  */
 
-<?php
 
-function datasets_views_data() {
+function tripal_chado_datasets_views_data() {
   $data['ds_organism_assembly']['table']['group'] = t('ds_organism_assembly');
 
-  $data['ds_organism_assembly']['table']['base'] = array(
+  $data['ds_organism_assembly']['table']['base'] = [
     'field' => 'oa_id',
-    'title' => t('ds_organism_assembly'), 
-    'help' => t('ds_organism_assembly contains assembly dataset for organisms.'), 
+    'title' => t('ds_organism_assembly'),
+    'help' => t('ds_organism_assembly contains assembly dataset for organisms.'),
     'weight' => -10,
-  );
+  ];
 
-  $data['ds_organism_assembly']['table']['join'] = array(
-    'node' => array(
-      'left_field' => 'oa_id', 
+  $data['ds_organism_assembly']['table']['join'] = [
+    'node' => [
+      'left_field' => 'oa_id',
       'field' => 'oa_id',
-    ),
-  );
+    ],
+  ];
 
-  $data['ds_organism_assembly']['oa_id'] = array(
-    'title' => t('oa_id'), 
+  $data['ds_organism_assembly']['oa_id'] = [
+    'title' => t('oa_id'),
     'help' => t('Organism assembly id.'),
     /*'relationship' => array(
       'base' => 'node',
@@ -32,211 +33,191 @@ function datasets_views_data() {
       'handler' => 'views_handler_relationship', 
       'label' => t('organism assembly'),
     ),	*/
-    'field' => array(
-      'handler' => 'views_handler_field', 
+    'field' => [
+      'handler' => 'views_handler_field',
       'click sortable' => TRUE,
-    ), 
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_numeric',
-    ), 
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
+    ],
+  ];
 
-  $data['ds_organism_assembly']['name'] = array(
-    'title' => t('co-ordinator name'), 
-    'help' => t('Just a name field.'), 
-    'field' => array(
-      'handler' => 'views_handler_field', 
+  $data['ds_organism_assembly']['name'] = [
+    'title' => t('co-ordinator name'),
+    'help' => t('Just a name field.'),
+    'field' => [
+      'handler' => 'views_handler_field',
       'click sortable' => TRUE,
-    ), 
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ), 
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_string',
-    ), 
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument_string',
-    ),
-  );
+    ],
+  ];
 
-  $data['ds_organism_assembly']['email'] = array(
-    'title' => t('Email'), 
-    'help' => t('Just a Email field.'), 
-    'field' => array(
-      'handler' => 'views_handler_field', 
+  $data['ds_organism_assembly']['email'] = [
+    'title' => t('Email'),
+    'help' => t('Just a Email field.'),
+    'field' => [
+      'handler' => 'views_handler_field',
       'click sortable' => TRUE,
-    ), 
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_string',
-    ), 
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
+    ],
+  ];
 
-  $data['ds_organism_assembly']['taxid'] = array(
-    'title' => t('Taxid'), 
-    'help' => t('Just an taxid field.'), 
-    'field' => array(
-      'handler' => 'views_handler_field', 
+  $data['ds_organism_assembly']['taxid'] = [
+    'title' => t('Taxid'),
+    'help' => t('Just an taxid field.'),
+    'field' => [
+      'handler' => 'views_handler_field',
       'click sortable' => TRUE,
-    ), 
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_numeric',
-    ), 
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
-    
-  $data['ds_organism_assembly']['organism'] = array(
-    'title' => t('Organism'), 
-    'help' => t('Organism field.'), 
-    'field' => array(
-      'handler' => 'views_handler_field', 
+    ],
+  ];
+
+  $data['ds_organism_assembly']['organism'] = [
+    'title' => t('Organism'),
+    'help' => t('Organism field.'),
+    'field' => [
+      'handler' => 'views_handler_field',
       'click sortable' => TRUE,
-    ), 
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'organism_filter_in_operator',
-    ), 
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
-  
-  $data['ds_organism_assembly']['common_name'] = array(
-    'title' => t('common_name'), 
-    'help' => t('common_name field.'), 
-    'field' => array(
-      'handler' => 'views_handler_field', 
+    ],
+  ];
+
+  $data['ds_organism_assembly']['common_name'] = [
+    'title' => t('common_name'),
+    'help' => t('common_name field.'),
+    'field' => [
+      'handler' => 'views_handler_field',
       'click sortable' => TRUE,
-    ), 
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_string',
-    ), 
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
-  
-  $data['ds_organism_assembly']['timestamp_field'] = array(
-    'title' => t('Timestamp'), 
-    'help' => t('Just a timestamp field.'), 
-    'field' => array(
-      'handler' => 'views_handler_field_date', 
+    ],
+  ];
+
+  $data['ds_organism_assembly']['timestamp_field'] = [
+    'title' => t('Timestamp'),
+    'help' => t('Just a timestamp field.'),
+    'field' => [
+      'handler' => 'views_handler_field_date',
       'click sortable' => TRUE,
-    ), 
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort_date',
-    ), 
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_date',
-    ),
-  );
-  
+    ],
+  ];
+
   $data['ds_gene_prediction']['table']['group'] = t('ds_gene_prediction');
 
-  $data['ds_gene_prediction']['table']['base'] = array(
+  $data['ds_gene_prediction']['table']['base'] = [
     'field' => 'pid',
-    'title' => t('ds_gene_prediction'), 
-    'help' => t('ds_gene_prediction contains gene prediction data for organisms.'), 
+    'title' => t('ds_gene_prediction'),
+    'help' => t('ds_gene_prediction contains gene prediction data for organisms.'),
     'weight' => -10,
-  );
+  ];
 
-  $data['ds_gene_prediction']['table']['join'] = array(
-    'node' => array(
-      'left_field' => 'pid', 
+  $data['ds_gene_prediction']['table']['join'] = [
+    'node' => [
+      'left_field' => 'pid',
       'field' => 'pid',
-    ),
-  );
+    ],
+  ];
 
-  $data['ds_gene_prediction']['pid'] = array(
-    'title' => t('pid'), 
+  $data['ds_gene_prediction']['pid'] = [
+    'title' => t('pid'),
     'help' => t('gene prediction id.'),
-    'field' => array(
-      'handler' => 'views_handler_field', 
+    'field' => [
+      'handler' => 'views_handler_field',
       'click sortable' => TRUE,
-    ), 
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_numeric',
-    ), 
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
+    ],
+  ];
 
-  $data['ds_gene_prediction']['name'] = array(
-    'title' => t('co-ordinator name'), 
-    'help' => t('Just a name field.'), 
-    'field' => array(
-      'handler' => 'views_handler_field', 
+  $data['ds_gene_prediction']['name'] = [
+    'title' => t('co-ordinator name'),
+    'help' => t('Just a name field.'),
+    'field' => [
+      'handler' => 'views_handler_field',
       'click sortable' => TRUE,
-    ), 
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ), 
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_string',
-    ), 
-    'argument' => array(
+    ],
+    'argument' => [
       'handler' => 'views_handler_argument_string',
-    ),
-  );
+    ],
+  ];
 
-  $data['ds_gene_prediction']['email'] = array(
-    'title' => t('Email'), 
-    'help' => t('Just a Email field.'), 
-    'field' => array(
-      'handler' => 'views_handler_field', 
+  $data['ds_gene_prediction']['email'] = [
+    'title' => t('Email'),
+    'help' => t('Just a Email field.'),
+    'field' => [
+      'handler' => 'views_handler_field',
       'click sortable' => TRUE,
-    ), 
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'views_handler_filter_string',
-    ), 
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
+    ],
+  ];
 
-    
-  $data['ds_gene_prediction']['organism'] = array(
-    'title' => t('Organism'), 
-    'help' => t('Organism field.'), 
-    'field' => array(
-      'handler' => 'views_handler_field', 
+
+  $data['ds_gene_prediction']['organism'] = [
+    'title' => t('Organism'),
+    'help' => t('Organism field.'),
+    'field' => [
+      'handler' => 'views_handler_field',
       'click sortable' => TRUE,
-    ), 
-    'filter' => array(
+    ],
+    'filter' => [
       'handler' => 'organism_filter_in_operator',
-    ), 
-    'sort' => array(
+    ],
+    'sort' => [
       'handler' => 'views_handler_sort',
-    ),
-  );
+    ],
+  ];
 
   return $data;
 }
 
-
-/**
- * Define my custom in_operator
- */
-class organism_filter_in_operator extends views_handler_filter_in_operator {
-  // overwrite the get_value_options function.
-  function get_value_options() {
-    if (isset($this->value_options)) {
-      return;
-    }
-//    $web_apollo_organism = variable_get('web_apollo_organism');
-//    if (!empty($web_apollo_organism)) {
-//      $organism_list = get_webapollo_organisms($web_apollo_organism);
-//    }
-
-    $organism_list = chado_get_organism_select_options(FALSE);
-
-    $this->value_options = $organism_list;
-  }
-}

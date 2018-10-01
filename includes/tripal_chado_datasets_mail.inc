@@ -8,7 +8,7 @@
  * @param $message
  * @param $params
  */
-function datasets_mail($key, &$message, $params) {
+function tripal_chado_datasets_mail($key, &$message, $params) {
   global $base_url, $base_path;
   $language = $message['language'];
 
