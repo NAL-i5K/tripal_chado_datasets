@@ -3,6 +3,7 @@
 /**
  * submit a dataset information form
  */
+
 function tripal_chado_datasets_request_form($form, &$form_state) {
 
   $form['information_markup'] = [
@@ -677,9 +678,16 @@ function tripal_chado_datasets_request_form($form, &$form_state) {
     '#suffix' => '</div>',
   ];
 
+  //Conditionally create a link for this section title.  Only do so if the site has this page.
+  $title = 'SHA512';
+  $link = '/how-generate-sha-512-checksum';
+  if (drupal_valid_path($link)){
+    $title = l(t('SHA512'), '/how-generate-sha-512-checksum', ['attributes' => ['target' => '_blank']]);
+  }
+
   $form['fileinfo']['SHA512'] = [
     '#type' => 'textfield',
-    '#title' => l(t('SHA512'), '/how-generate-sha-512-checksum', ['attributes' => ['target' => '_blank']]),
+    '#title' => $title,
     '#description' => t('SHA512.'),
     '#required' => FALSE,
     '#prefix' => t('You can transfer your file to us in one of three ways: upload your file from your computer, give us a URL to the file, or transmit via our ftp site. Please select only one option, and enter the sha512 checksum for the file.<br /><br />'),

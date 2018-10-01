@@ -15,26 +15,26 @@ function tripal_chado_datasets_install(){
 //TODO: theres probably a drupal way to define sequence....
 // Also, are these sequence tables necessary?  can't we use a autoincrementing pkey instead?
 // 
- $sql = 'CREATE SEQUENCE gene_prediction_pid_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1';
-
-    db_query($sql);
-
- $sql = 'CREATE SEQUENCE mapped_dataset_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1';
-
-    db_query($sql);
-
-   $t = get_t();
-   drupal_set_message($t('datasets module was installed.'), 'status');
+// $sql = 'CREATE SEQUENCE gene_prediction_pid_seq
+//    START WITH 1
+//    INCREMENT BY 1
+//    NO MINVALUE
+//    NO MAXVALUE
+//    CACHE 1';
+//
+//    db_query($sql);
+//
+// $sql = 'CREATE SEQUENCE mapped_dataset_id_seq
+//    START WITH 1
+//    INCREMENT BY 1
+//    NO MINVALUE
+//    NO MAXVALUE
+//    CACHE 1';
+//
+//    db_query($sql);
+//
+//   $t = get_t();
+//   drupal_set_message($t('datasets module was installed.'), 'status');
 }
 
 /**
