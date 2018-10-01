@@ -5,7 +5,6 @@
  * well in flat csv files
  */
 
-
 //TODO: Review what forms needs to be included
 require_once 'includes/tripal_chado_datasets_submission.form.inc';
 require_once 'includes/tripal_chado_datasets.admin.inc';
@@ -138,7 +137,7 @@ function tripal_chado_datasets_menu() {
 /**
  * Implements hook_permission().
  */
-function datasets_permission() {
+function tripal_chado_datasets_permission() {
   return [
     'administer datasets' => [
       'title' => t('Administer datasets'),
@@ -155,7 +154,7 @@ function datasets_permission() {
 /**
  *  function dataset_access_callback
  */
-function dataset_access_callback() {
+function tripal_chado_datasets_access_callback() {
   global $user;
   if (arg(0) == 'datasets' && $user->uid == 0) {
     drupal_goto('/user/login', ['query' => drupal_get_destination()]);
@@ -166,7 +165,7 @@ function dataset_access_callback() {
 /**
  * Default implementation of hook_captcha().
  */
-function datasets_captcha($op, $captcha_type = '') {
+function tripal_chado_datasets_captcha($op, $captcha_type = '') {
   $result = captcha_captcha($op, $captcha_type);
   if (($op == 'generate') && ($captcha_type == 'Math')) {
     $result = [];
@@ -199,18 +198,18 @@ function datasets_captcha($op, $captcha_type = '') {
  *
  * @return string
  */
-function datasets_information_view($oa_id) {
+function tripal_chado_datasets_information_view($oa_id) {
   $query = db_select('ds_submissions', 'os');
   $query->fields("os");
   $query->condition("oa_id", $oa_id);
   $result = $query->execute()->fetchAll();
 
   // Now build the form array
-  //TODO:  Let's handle this differently.  We can rename the variable, or we can pass in the chado organism id...
 
 //  $web_apollo_organism = variable_get('web_apollo_organism');
 //  $organism_data = get_webapollo_organisms($web_apollo_organism);
 
+  //TODO:  We have access to the organism_id.
   $result[0]->organism = "I dont know what this should be.  String? organism_id?";
 
     //$result[0]->organism = $organism_data[$result[0]->organism];
@@ -413,7 +412,7 @@ function ds_tablesort_header($cell, $header, $ts) {
  *  Implementation of hook_theme().
  */
 function datasets_theme() {
-  $core_path = drupal_get_path('module', 'datasets');
+  $core_path = drupal_get_path('module', 'tripal_chado_datasets');
   //$path = 'themes/templates/';
   return [
     'datasets_organism_approval' => [

@@ -18,7 +18,7 @@
  */
 function datasets_organism_approval($form, &$form_state, $id) {
   $header = [];
-  drupal_add_js(drupal_get_path('module', 'datasets') . '/js/organism_approval_status.js');
+  drupal_add_js(drupal_get_path('module', 'tripal_chado_datasets') . '/js/organism_approval_status.js');
 
   // sql here
   $data = db_select('ds_request_project', 'rp')
@@ -329,7 +329,7 @@ function dataset_report($form, &$form_state) {
   $_GET['q'] = 'admin/structure/datasets/report';
 
   $form['#attached']['css'] = [
-    drupal_get_path('module', 'datasets') . '/css/report.css',
+    drupal_get_path('module', 'tripal_chado_datasets') . '/css/report.css',
   ];
   $form['header_text'] = [
     '#markup' => t('<div id="text">Below report is for user\'s who submitted their datasets for Assembly, gene and mapped.</div>'),

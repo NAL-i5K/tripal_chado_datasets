@@ -6,7 +6,7 @@
 */
 function project_dataset_submission_account($form, &$form_state) {
 $form['#attached']['css'] = [
-drupal_get_path('module', 'datasets') . '/css/project-dataset.css',
+drupal_get_path('module', 'tripal_chado_datasets') . '/css/project-dataset.css',
 ];
 
 $form['information_markup'] = [
