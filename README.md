@@ -20,7 +20,12 @@ https://www.drupal.org/files/issues/1395184_31.patch
 ### Set the admin email variable
 
 
-At the start of the module file, you modify this line of code to point to `define('FROM_ADDRESS', '"NAL-i5k"<i5k@ars.usda.gov>');`
+At the start of the module file, you modify this line of code defining the `tripal_chado_datasets_FROM_ADDRESS` variable to use your site's admin email address.
+
+
+```php
+variable_set('tripal_chado_datasets_FROM_ADDRESS', '"Sample Address"<example@example.gov>');
+```
 
 ### More
 
