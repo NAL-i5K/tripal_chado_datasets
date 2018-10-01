@@ -1,6 +1,6 @@
 <?php
 
-//TODO:  these functions were the admin form, but i would like to move them to say a curation form, and use "admin" to refer ot administering this module itself.
+//TODO:  these functions were the admin form, but i would like to move them to say a curation form, and use "admin" to refer to administering this module itself.
 
 /**
  * @file
