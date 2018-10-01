@@ -42,10 +42,6 @@ the below modules will be installed when enabling datasets:
 1. Date module
 2. honeypot module
 
-create a "datasets" folder for organism image under sites/default/files/
-
-4. create db_tables in databse.
-
 
 # Admin usage
 
