@@ -20,7 +20,7 @@ https://www.drupal.org/files/issues/1395184_31.patch
 ### Set the admin email variable
 
 
-At the start of the module file, u modify this line of code to point to `define('FROM_ADDRESS', '"NAL-i5k"<i5k@ars.usda.gov>');`
+At the start of the module file, you modify this line of code to point to `define('FROM_ADDRESS', '"NAL-i5k"<i5k@ars.usda.gov>');`
 
 ### More
 
