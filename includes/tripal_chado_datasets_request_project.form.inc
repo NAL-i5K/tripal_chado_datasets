@@ -180,14 +180,16 @@ function tripal_chado_datasets_request_project_submit($form, &$form_state) {
     ->execute() or die("Unable to insert data");
   //Send the e-mail to the recipients using the site default language.
   $to_user = $values['email'];
-  $from_address = FROM_ADDRESS;
+
+  $from_address = variable_get('tripal_chado_datasets_FROM_ADDRESS');
   $send_user = drupal_mail('tripal_chado_datasets', 'email_acknowledgement_touser', $to_user, language_default(), $data, $from_address, TRUE);
   if (empty($send_user['result']) || ($send_user['result'] != 1)) {
     drupal_set_message(t('Failed to send e-mail to the submitted user.'));
   }
 
-  //Send email to the admin - when user submitted the data.
-  $recipient = FROM_ADDRESS;
+  //TODO: why do we use the same variable here for recipient?
+  $recipient = variable_get('tripal_chado_datasets_FROM_ADDRESS');
+
   $from = $values['email'];
   $sent = drupal_mail('tripal_chado_datasets', 'request_project_email', $recipient, language_default(), $data, $from, TRUE);
   if (empty($sent['result']) || ($sent['result'] != 1)) {
@@ -195,9 +197,9 @@ function tripal_chado_datasets_request_project_submit($form, &$form_state) {
     drupal_set_message(t('Failed to send e-mail to the admin.'));
   }
   else {
-    drupal_set_message(t('Your Project Request %genus was successfully created. You will receive an email once your request is approved by an administrator.'), [
+    drupal_set_message(t('Your Project Request for %genus %species was successfully created. You will receive an email once your request is approved by an administrator.', [
       '%genus' => $values['genus'],
       '%species' => $values['species'],
-    ], $type = 'status');
+    ]), $type = 'status');
   }
 }

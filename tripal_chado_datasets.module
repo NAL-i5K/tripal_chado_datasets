@@ -13,7 +13,7 @@ require_once 'includes/DSTableSort.inc';
 require_once 'includes/views/organism_filter_in_operator.inc';
 
 
-define('FROM_ADDRESS', '"Sample Address"<example@example.gov>');
+variable_set('tripal_chado_datasets_FROM_ADDRESS', '"Sample Address"<example@example.gov>');
 
 /**
  * Implementation of hook_init().

@@ -12,13 +12,18 @@ function tripal_chado_datasets_mail($key, &$message, $params) {
   global $base_url, $base_path;
   $language = $message['language'];
 
+  $name = isset($params['fullname']) ? $params['fullname'] : $params['cordinator_name'];
+
+
   $variables = [
     '!organism' => $params['genus'] . ' ' . $params['species'],
-    '!user' => $params['cordinator_name'],
+    '!user' => $name,
     '!form' => url($_GET['q'], ['absolute' => TRUE]),
   ];
 
-  $filename_md5sum = $params['SHA512'];
+
+  $filename_md5sum = isset($params['SHA512']) ? $params['SHA512'] : NULL;
+
   if (isset($params['upload']) && !empty($params['upload'])) {
     $file = file_load($params['upload']);
     $filename_md5sum = $file->filename . ' & ' . $filename_md5sum;
