@@ -3,7 +3,7 @@
 /**
  * submit a dataset information form
  */
-function submit_datasets($form, &$form_state) {
+function tripal_chado_datasets_request_form($form, &$form_state) {
 
   $form['information_markup'] = [
     '#markup' => t('<div id="text">Please note that this dataset will be visible to the public in the JBrowse genome browser. Contact us if this dataset needs to remain private. Refer to our <a href="' . $GLOBALS['base_url'] . '/data-management-policy">data management</a> and <a href="' . $GLOBALS['base_url'] . '/long-term-i5k-workspace-project-management">long-term management policy</a> documents for information about the data types that we store and our long-term data management policy.</div><br>'),
@@ -27,9 +27,6 @@ function submit_datasets($form, &$form_state) {
     '#required' => TRUE,
     '#value' => $user->name,
     '#disabled' => TRUE,
-
-    // '#prefix' => '<div class="col-lg-6">',
-    // '#suffix' => '</div>',
   ];
 
   $form['data_provider']['email'] = [
@@ -39,17 +36,8 @@ function submit_datasets($form, &$form_state) {
     '#required' => TRUE,
     '#value' => $user->mail,
     '#disabled' => TRUE,
-    // '#prefix' => '<div class="col-lg-6">',
-    // '#suffix' => '</div>',
   ];
 
-  // $form['data_provider']['affiliation'] = array(
-  //   '#type' => 'textfield',
-  //   '#title' => t('Affiliation'),
-  //   '#required' => TRUE,
-  //   // '#prefix' => '<div class="col-lg-6">',
-  //   // '#suffix' => '</div>',
-  // );
 
   $form['general_information'] = [
     '#type' => 'fieldset',
@@ -63,15 +51,6 @@ function submit_datasets($form, &$form_state) {
 
 
   $organism_options = chado_get_organism_select_options(FALSE);
-
-  //TODO: Verify the array is as expected.
-
-  //  $web_apollo_organism = variable_get('web_apollo_organism');
-  //  if (!empty($web_apollo_organism)) {
-  //    $organism_list = get_webapollo_organisms();
-  //  }
-
-  //ksort($organism_options, 2);
 
   $form['general_information']['organism'] = [
     '#type' => 'select',
@@ -152,7 +131,7 @@ function submit_datasets($form, &$form_state) {
     '#title' => t('Is the dataset published?'),
     '#default_value' => $dataset_is_publish_selected,
     '#ajax' => [
-      'callback' => 'dataset_is_publish_dropdown_callback',
+      'callback' => 'tripal_chado_datasets_is_publish_dropdown_callback',
       'wrapper' => 'fieldset_dataset_is_publish',
       'method' => 'replace',
       'effect' => 'fade',
@@ -216,22 +195,6 @@ function submit_datasets($form, &$form_state) {
     '#suffix' => '</div>',
   ];
 
-
-  // $new = Array('New Organism' => 'New Organism');
-  // $organism_options = array_slice($organism_options, 0, 1, TRUE) + $new + array_slice($organism_options, 1, count($organism_options)-1, TRUE);
-
-  // $form['assembly']['project']['organism'] = array(
-  //   '#type' => 'select',
-  //   '#title' => t('Organism'),
-  //   '#options' => $organism_options,
-  //   '#ajax' => array(
-  //     'callback' => 'species_dropdown_callback',
-  //     'wrapper' => 'species',
-  //   ),
-  //   '#limit_validation_errors' => array(),
-  //   '#required' => TRUE,
-  // );
-
   // $form['assembly']['project']['species'] = array(
   //   '#type' => 'fieldset',
   //   '#prefix' => '<div id="species">',
@@ -276,7 +239,7 @@ function submit_datasets($form, &$form_state) {
     '#title' => t('Will you manually curate this assembly using i5k workspace tools?'),
     '#options' => $curate_options,
     '#ajax' => [
-      'callback' => 'manual_curation_dropdown_callback',
+      'callback' => 'tripal_chado_manual_curation_dropdown_callback',
       'wrapper' => 'manual_curation',
     ],
     '#limit_validation_errors' => [],
@@ -297,7 +260,7 @@ function submit_datasets($form, &$form_state) {
       '#title' => t('Is the curation coordinator the same as the genome coordinator?'),
       '#default_value' => FALSE,
       '#ajax' => [
-        'callback' => 'name_email_callback',
+        'callback' => 'tripal_chado_name_email_callback',
         'wrapper' => 'name_email',
       ],
     ];
@@ -356,7 +319,7 @@ function submit_datasets($form, &$form_state) {
       '#title' => t('Do you need assistance developing an Official Gene Set?'),
       '#options' => $assistance_options,
       '#ajax' => [
-        'callback' => 'assistance_dropdown_callback',
+        'callback' => 'tripal_chado_assistance_dropdown_callback',
         'wrapper' => 'assistance',
       ],
       '#limit_validation_errors' => [],
@@ -475,7 +438,7 @@ function submit_datasets($form, &$form_state) {
     '#title' => t('Sex'),
     '#default_value' => $assembly_gender_selected,
     '#ajax' => [
-      'callback' => 'assembly_datasource_gender_dropdown_callback',
+      'callback' => 'tripal_chado_datasets_assembly_datasource_gender_dropdown_callback',
       'wrapper' => 'fieldset_assembly_gender_textfield',
       'method' => 'replace',
       'effect' => 'fade',
@@ -654,7 +617,7 @@ function submit_datasets($form, &$form_state) {
     '#title' => t('Sex'),
     '#default_value' => $mapped_gender_selected,
     '#ajax' => [
-      'callback' => 'mapped_dataset_gender_dropdown_callback',
+      'callback' => 'tripal_chado_datasets_gender_dropdown_callback',
       'wrapper' => 'fieldset_mapped_gender_textfield',
       'method' => 'replace',
       'effect' => 'fade',
@@ -834,7 +797,7 @@ function submit_datasets($form, &$form_state) {
  * Data source url validation
  *
  */
-function submit_datasets_validate($form, &$form_state) {
+function tripal_chado_datasets_request_form_validate($form, &$form_state) {
   // dsm($form_state);
   $values = $form_state['values'];
   $name = $values['name'];
@@ -981,7 +944,7 @@ function submit_datasets_validate($form, &$form_state) {
 /**
  * hook_form submit
  */
-function submit_datasets_submit($form, &$form_state) {
+function tripal_chado_datasets_request_form_submit($form, &$form_state) {
   global $user;
   $values = $form_state['values'];
 
@@ -1111,7 +1074,7 @@ function submit_datasets_submit($form, &$form_state) {
   $values['organism'] = $organism_list[$values['organism']];
 
   // Send the e-mail to the recipients using the site default language.
-  $sent = drupal_mail('datasets', 'submit_dataset_email', $to_address, language_default(), $values, $from, TRUE);
+  $sent = drupal_mail('tripal_chado_datasets', 'submit_dataset_email', $to_address, language_default(), $values, $from, TRUE);
   if (empty($sent['result']) || ($sent['result'] != 1)) {
     // handle send fail, $sent ===false when mail fails, but it won't always recognize a failure
     drupal_set_message(t('Failed to send e-mail.'));
@@ -1122,30 +1085,27 @@ function submit_datasets_submit($form, &$form_state) {
 
 }
 
-function dataset_is_publish_dropdown_callback($form, $form_state) {
+
+function tripal_chado_datasets_is_publish_dropdown_callback($form, $form_state) {
   return $form['general_information']['fieldset_dataset_is_publish'];
 }
 
-function assembly_datasource_gender_dropdown_callback($form, $form_state) {
+function tripal_chado_datasets_assembly_datasource_gender_dropdown_callback($form, $form_state) {
   return $form['assembly']['data_source']['fieldset_assembly_gender_textfield'];
 }
 
-function mapped_dataset_gender_dropdown_callback($form, $form_state) {
+function tripal_chado_datasets_gender_dropdown_callback($form, $form_state) {
   return $form['mapped_dataset']['fieldset_mapped_gender_textfield'];
 }
 
-function manual_curation_dropdown_callback($form, $form_state) {
+function tripal_chado_manual_curation_dropdown_callback($form, $form_state) {
   return $form['assembly']['project']['manual_curation'];
 }
 
-function name_email_callback($form, $form_state) {
+function tripal_chado_name_email_callback($form, $form_state) {
   return $form['assembly']['project']['manual_curation']['name_email'];
 }
 
-function assistance_dropdown_callback($form, $form_state) {
+function tripal_chado_assistance_dropdown_callback($form, $form_state) {
   return $form['assembly']['project']['manual_curation']['assistance'];
-}
-
-function species_dropdown_callback($form, $form_state) {
-  return $form['assembly']['project']['species'];
 }
