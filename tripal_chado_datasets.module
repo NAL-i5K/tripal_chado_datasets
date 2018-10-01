@@ -13,7 +13,7 @@ require_once 'includes/DSTableSort.inc';
 require_once 'includes/views/organism_filter_in_operator.inc';
 
 
-define('FROM_ADDRESS', '"NAL-i5k"<i5k@ars.usda.gov>');
+define('FROM_ADDRESS', '"Sample Address"<example@example.gov>');
 
 /**
  * Implementation of hook_init().
@@ -203,19 +203,14 @@ function tripal_chado_datasets_captcha($op, $captcha_type = '') {
  */
 function tripal_chado_datasets_information_view($oa_id) {
   $query = db_select('ds_submissions', 'os');
-  $query->fields("os");
+  $query->fields("os", 'organism');
   $query->condition("oa_id", $oa_id);
   $result = $query->execute()->fetchAll();
 
-  // Now build the form array
-
-  //  $web_apollo_organism = variable_get('web_apollo_organism');
-  //  $organism_data = get_webapollo_organisms($web_apollo_organism);
-
-  //TODO:  We have access to the organism_id.
-  $result[0]->organism = "I dont know what this should be.  String? organism_id?";
-
-  //$result[0]->organism = $organism_data[$result[0]->organism];
+  //replace organism id with common name in chado.
+  $organism_id = $result[0]->organism;
+  $organism = chado_get_organism(['organism_id' => $organism_id]);
+  $result[0]->organism = $organism->common_name;
 
   $output = '';
 
