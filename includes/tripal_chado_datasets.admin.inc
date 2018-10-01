@@ -651,7 +651,6 @@ function tripal_chado_datasets_information_import() {
     $data['email'] = $row->email;
     $data['organism'] = $row->organism;
     $data['description'] = $row->description;
-    $data['organism_image_filename'] = $row->organism_image_url;
     $data['is_curate_assembly'] = $row->is_curate_assembly;
     $data['is_same'] = $row->is_same;
     $data['manual_curation_name'] = $row->manual_curation_name;

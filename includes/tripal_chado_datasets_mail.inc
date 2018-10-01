@@ -58,12 +58,14 @@ function tripal_chado_datasets_mail($key, &$message, $params) {
       $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
 
       break;
+
     case 'request_project_approved_email':
       $message['subject'] = t('i5k Workspace Project Request Approved for "' . $params['genus'] . ' ' . $params['species'] . '"', $variables, ['langcode' => $language->language]);
       $message['body'][] = "Dear " . $params['fullname'] . ", <br><br>We have approved your project request for " . $params['genus'] . ' ' . $params['species'] . ".";
       $message['body'][] = '<br>You can submit your datasets. Please visit <a href="https://i5k.nal.usda.gov/datasets/submit-a-dataset">https://i5k.nal.usda.gov/datasets/submit-a-dataset</a> to submit. For a general description of the submission process, please view <a href="https://i5k.nal.usda.gov/data-submission-overview">https://i5k.nal.usda.gov/data-submission-overview</a>. <Br><br>Best,<br><bR>The i5k Workspace team';
       $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
       break;
+
     case 'register_project_submission_account':
       $message['subject'] = t("" . $params['name'] . " registered for project or data submission account", $variables, ['langcode' => $language->language]);
       $message['body'][] = "Below are the user details<br><br> ";
@@ -151,7 +153,6 @@ function tripal_chado_datasets_mail($key, &$message, $params) {
       if ($params['dataset_type'] == 'Assembly') {
         $message_body .= "<h3>Genome assembly information:</h3>";
         $message_body .= "Project description to display in your organism page: " . $params['description'] . "<br>";
-        $message_body .= "Image file name for your organism page: " . $params['organism_image_filename'] . "<br>";
         $message_body .= "Will you manually curate this assembly using i5k workspace tools?: " . $params['is_curate_assembly'] . "<br>";
         if (isset($params['is_curate_assembly']) && $params['is_curate_assembly'] == 'Yes') {
           $message_body .= "Co-ordinator name: " . $params['manual_curation_name'] . "<bR>";

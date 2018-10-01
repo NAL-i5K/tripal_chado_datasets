@@ -30,7 +30,6 @@ if ($data[0]->dataset_is_publish == 'Yes') {
 <h4>Genome Assembly Information:</h4>
 <b>Project Background</b><br><br>
 <p><b>Project description to display in your organism page:</b> <?php print $data[0]->description; ?><br></p>
-<p><b>Submit image for your organism page:</b> <?php print $data[0]->organism_image_filename; ?><br></p>
 <p><b>is_curate_assembly:</b> <?php print $data[0]->is_curate_assembly; ?></p><br>
 <?php if($data[0]->is_curate_assembly == 'Yes') { ?>
 <p><b>is_same:</b> <?php print $is_same = ($data[0]->is_same == 1)?'Yes':'No'; ?></p><br>
