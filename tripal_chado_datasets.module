@@ -17,7 +17,7 @@ define('FROM_ADDRESS', '"NAL-i5k"<i5k@ars.usda.gov>');
 /**
  * Implementation of hook_init().
  */
-function datasets_init() {
+function tripal_chado_datasets_menu_init() {
   if (arg(0) === 'node' && strpos(arg(1), '.')) {
     drupal_not_found();
   }
@@ -26,7 +26,7 @@ function datasets_init() {
 /**
  * Implementation of hook_menu().
  */
-function datasets_menu() {
+function tripal_chado_datasets_menu() {
   $items = [];
 
 
@@ -40,7 +40,7 @@ function datasets_menu() {
     'type' => MENU_CALLBACK,
     'weight' => 100,
     'file' => 'includes/tripal_chado_datasets_submission.form.inc',
-    'file_path' => drupal_get_path('module', 'datasets'),
+    'file_path' => drupal_get_path('module', 'tripal_chado_datasets'),
   ];
 
   $items['datasets/%/view'] = [
@@ -89,9 +89,8 @@ function datasets_menu() {
     'type' => MENU_CALLBACK,
     'weight' => 100,
     'file' => 'includes/tripal_chado_datasets_request_project.form.inc',
-    'file_path' => drupal_get_path('module', 'datasets'),
+    'file_path' => drupal_get_path('module', 'tripal_chado_datasets'),
   ];
-
 
   $items['register/project-dataset/account'] = [
     'title' => 'Register for a Project or Dataset Submission Account',
@@ -101,7 +100,7 @@ function datasets_menu() {
     'type' => MENU_CALLBACK,
     'weight' => 100,
     'file' => 'includes/tripal_chado_datasets_project_dataset_submission_account.form.inc',
-    'file_path' => drupal_get_path('module', 'datasets'),
+    'file_path' => drupal_get_path('module', 'tripal_chado_datasets'),
   ];
 
 
@@ -114,7 +113,7 @@ function datasets_menu() {
     'page callback' => 'dataset_cordinator_organisms',
     'access arguments' => ['administer datasets'],
     'file' => 'includes/tripal_chado_datasets.admin.inc',
-    'file_path' => drupal_get_path('module', 'datasets'),
+    'file_path' => drupal_get_path('module', 'tripal_chado_datasets'),
   ];
 
 
