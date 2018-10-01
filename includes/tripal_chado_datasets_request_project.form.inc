@@ -8,7 +8,7 @@
 function request_project($form, &$form_state) {
 
   $form['#attached']['css'] = [
-    drupal_get_path('module', 'datasets') . '/css/request_project.css',
+    drupal_get_path('module', 'tripal_chado_datasets') . '/css/request_project.css',
   ];
   $form['header_text'] = [
     '#markup' => '<div id="text">Thank you for your interest in submitting your genome project to the i5k Workspace! Please answer the following questions to help us decide if the resources at the i5k Workspace are a good fit for your project. Refer to our <a href="' . $GLOBALS['base_url'] . '/data-management-policy">data management</a> and <a href="' . $GLOBALS['base_url'] . '/long-term-i5k-workspace-project-management">long-term management policy</a> documents for information about the data types that we store and our long-term data management policy.</div>',

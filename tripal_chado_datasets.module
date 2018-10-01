@@ -5,11 +5,10 @@
  * well in flat csv files
  */
 
-
 //TODO: Review what forms needs to be included
-require_once 'includes/datasets_submission.form.inc';
-require_once 'includes/datasets.admin.inc';
-require_once 'includes/datasets_mail.inc';
+require_once 'includes/tripal_chado_datasets_submission.form.inc';
+require_once 'includes/tripal_chado_datasets.admin.inc';
+require_once 'includes/tripal_chado_datasets_mail.inc';
 
 
 define('FROM_ADDRESS', '"NAL-i5k"<i5k@ars.usda.gov>');
@@ -17,7 +16,7 @@ define('FROM_ADDRESS', '"NAL-i5k"<i5k@ars.usda.gov>');
 /**
  * Implementation of hook_init().
  */
-function datasets_init() {
+function tripal_chado_datasets_menu_init() {
   if (arg(0) === 'node' && strpos(arg(1), '.')) {
     drupal_not_found();
   }
@@ -26,7 +25,7 @@ function datasets_init() {
 /**
  * Implementation of hook_menu().
  */
-function datasets_menu() {
+function tripal_chado_datasets_menu() {
   $items = [];
 
 
@@ -39,8 +38,8 @@ function datasets_menu() {
     'access arguments' => ['access datasets'],
     'type' => MENU_CALLBACK,
     'weight' => 100,
-    'file' => 'includes/datasets_submission.form.inc',
-    'file_path' => drupal_get_path('module', 'datasets'),
+    'file' => 'includes/tripal_chado_datasets_submission.form.inc',
+    'file_path' => drupal_get_path('module', 'tripal_chado_datasets'),
   ];
 
   $items['datasets/%/view'] = [
@@ -49,7 +48,7 @@ function datasets_menu() {
     'page arguments' => [1],
     'access arguments' => ['administer datasets'],
     'type' => MENU_CALLBACK,
-    'file' => 'includes/datasets.admin.inc',
+    'file' => 'includes/tripal_chado_datasets.admin.inc',
   ];
 
   $items['datasets_og/%/delete'] = [
@@ -58,7 +57,7 @@ function datasets_menu() {
     'page arguments' => ['datasets_og_delete_form', 1],
     'access arguments' => ['administer datasets'],
     'type' => MENU_CALLBACK,
-    'file' => 'includes/datasets.admin.inc',
+    'file' => 'includes/tripal_chado_datasets.admin.inc',
   ];
 
   $items['datasets/organism/%/edit'] = [
@@ -67,7 +66,7 @@ function datasets_menu() {
     'page arguments' => ['datasets_organism_approval', 2],
     'access arguments' => ['administer datasets'],
     'type' => MENU_CALLBACK,
-    'file' => 'includes/datasets.admin.inc',
+    'file' => 'includes/tripal_chado_datasets.admin.inc',
   ];
 
   $items['datasets/dataimport'] = [
@@ -76,7 +75,7 @@ function datasets_menu() {
     'page arguments' => [1],
     'access arguments' => ['administer datasets'],
     'type' => MENU_CALLBACK,
-    'file' => 'includes/datasets.admin.inc',
+    'file' => 'includes/tripal_chado_datasets.admin.inc',
   ];
 
   //Form to request creating a chado organism.
@@ -88,10 +87,9 @@ function datasets_menu() {
     'access arguments' => ['access datasets'],
     'type' => MENU_CALLBACK,
     'weight' => 100,
-    'file' => 'includes/datasets_request_project.form.inc',
-    'file_path' => drupal_get_path('module', 'datasets'),
+    'file' => 'includes/tripal_chado_datasets_request_project.form.inc',
+    'file_path' => drupal_get_path('module', 'tripal_chado_datasets'),
   ];
-
 
   $items['register/project-dataset/account'] = [
     'title' => 'Register for a Project or Dataset Submission Account',
@@ -100,8 +98,8 @@ function datasets_menu() {
     'access arguments' => ['access register form'],
     'type' => MENU_CALLBACK,
     'weight' => 100,
-    'file' => 'includes/datasets_project_dataset_submission_account.form.inc',
-    'file_path' => drupal_get_path('module', 'datasets'),
+    'file' => 'includes/tripal_chado_datasets_project_dataset_submission_account.form.inc',
+    'file_path' => drupal_get_path('module', 'tripal_chado_datasets'),
   ];
 
 
@@ -113,8 +111,8 @@ function datasets_menu() {
     'description' => t('List of Organism\'s for approve/reject'),
     'page callback' => 'dataset_cordinator_organisms',
     'access arguments' => ['administer datasets'],
-    'file' => 'includes/datasets.admin.inc',
-    'file_path' => drupal_get_path('module', 'datasets'),
+    'file' => 'includes/tripal_chado_datasets.admin.inc',
+    'file_path' => drupal_get_path('module', 'tripal_chado_datasets'),
   ];
 
 
@@ -130,7 +128,7 @@ function datasets_menu() {
     'page arguments' => ['dataset_report'],
     'access arguments' => ['administer datasets'],
     'type' => MENU_LOCAL_TASK,
-    'file' => 'includes/datasets.admin.inc',
+    'file' => 'includes/tripal_chado_datasets.admin.inc',
   ];
 
   return $items;
@@ -139,7 +137,7 @@ function datasets_menu() {
 /**
  * Implements hook_permission().
  */
-function datasets_permission() {
+function tripal_chado_datasets_permission() {
   return [
     'administer datasets' => [
       'title' => t('Administer datasets'),
@@ -156,7 +154,7 @@ function datasets_permission() {
 /**
  *  function dataset_access_callback
  */
-function dataset_access_callback() {
+function tripal_chado_datasets_access_callback() {
   global $user;
   if (arg(0) == 'datasets' && $user->uid == 0) {
     drupal_goto('/user/login', ['query' => drupal_get_destination()]);
@@ -167,7 +165,7 @@ function dataset_access_callback() {
 /**
  * Default implementation of hook_captcha().
  */
-function datasets_captcha($op, $captcha_type = '') {
+function tripal_chado_datasets_captcha($op, $captcha_type = '') {
   $result = captcha_captcha($op, $captcha_type);
   if (($op == 'generate') && ($captcha_type == 'Math')) {
     $result = [];
@@ -200,18 +198,18 @@ function datasets_captcha($op, $captcha_type = '') {
  *
  * @return string
  */
-function datasets_information_view($oa_id) {
+function tripal_chado_datasets_information_view($oa_id) {
   $query = db_select('ds_submissions', 'os');
   $query->fields("os");
   $query->condition("oa_id", $oa_id);
   $result = $query->execute()->fetchAll();
 
   // Now build the form array
-  //TODO:  Let's handle this differently.  We can rename the variable, or we can pass in the chado organism id...
 
 //  $web_apollo_organism = variable_get('web_apollo_organism');
 //  $organism_data = get_webapollo_organisms($web_apollo_organism);
 
+  //TODO:  We have access to the organism_id.
   $result[0]->organism = "I dont know what this should be.  String? organism_id?";
 
     //$result[0]->organism = $organism_data[$result[0]->organism];
@@ -414,7 +412,7 @@ function ds_tablesort_header($cell, $header, $ts) {
  *  Implementation of hook_theme().
  */
 function datasets_theme() {
-  $core_path = drupal_get_path('module', 'datasets');
+  $core_path = drupal_get_path('module', 'tripal_chado_datasets');
   //$path = 'themes/templates/';
   return [
     'datasets_organism_approval' => [

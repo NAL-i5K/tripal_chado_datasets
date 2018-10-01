@@ -10,28 +10,28 @@
   * Implements of hook_install().
   */
 
-function datasets_install(){
+function tripal_chado_datasets_install(){
 
 //TODO: theres probably a drupal way to define sequence....
 // Also, are these sequence tables necessary?  can't we use a autoincrementing pkey instead?
 // 
-// $sql = 'CREATE SEQUENCE gene_prediction_pid_seq
-//    START WITH 1
-//    INCREMENT BY 1
-//    NO MINVALUE
-//    NO MAXVALUE
-//    CACHE 1';
-//
-//    db_query($sql);
-//
-// $sql = 'CREATE SEQUENCE mapped_dataset_id_seq
-//    START WITH 1
-//    INCREMENT BY 1
-//    NO MINVALUE
-//    NO MAXVALUE
-//    CACHE 1';
-//
-//    db_query($sql);
+ $sql = 'CREATE SEQUENCE gene_prediction_pid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1';
+
+    db_query($sql);
+
+ $sql = 'CREATE SEQUENCE mapped_dataset_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1';
+
+    db_query($sql);
 
    $t = get_t();
    drupal_set_message($t('datasets module was installed.'), 'status');
@@ -40,7 +40,7 @@ function datasets_install(){
 /**
  * Implementation of hook_schema().
  */
-function datasets_schema() {
+function tripal_chado_datasets_schema() {
   // Table for the ds_project_dataset_account.
   $schema['ds_project_dataset_account'] = [
     'description' => 'User registeration form for project or dataset account.',
@@ -952,8 +952,8 @@ function datasets_schema() {
 /**
  * Implements of hook_uninstall().
  */
-function datasets_uninstall() {
-  drupal_uninstall_schema('datasets');
+function tripal_chado_datasets_uninstall() {
+  drupal_uninstall_schema('tripal_chado_datasets');
 
 
   //TODO: theres probably a drupal way to define sequence....
