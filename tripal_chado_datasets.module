@@ -56,7 +56,7 @@ function tripal_chado_datasets_menu() {
   $items['datasets_og/%/delete'] = [
     'title' => 'Delete dataset information',
     'page callback' => 'drupal_get_form',
-    'page arguments' => ['datasets_og_delete_form', 1],
+    'page arguments' => ['tripal_chado_datasets_md_delete_form', 1],
     'access arguments' => ['administer datasets'],
     'type' => MENU_CALLBACK,
     'file' => 'includes/tripal_chado_datasets.admin.inc',

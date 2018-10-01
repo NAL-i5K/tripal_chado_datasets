@@ -549,69 +549,6 @@ function tripal_chado_datasets_md_delete_form_submit($form, &$form_state) {
   drupal_set_message(t('The item has been deleted'));
 }
 
-function datasets_gp_delete_form($form, &$form_state, $item) {
-  $form['#item'] = $item;
-  // Note confirm_form() can be used here, but I prefer to use my own for styling purposes
-  $form['header'] = [
-    '#markup' => t('Are you sure you wish to delete the item?'),
-    '#prefix' => '',
-    '#suffix' => '<br />',
-  ];
-  $form['warning'] = [
-    '#markup' => t('Warning, this action cannot be undone<br><br>'),
-    '#prefix' => '',
-    '#suffix' => '',
-  ];
-  $form['delete_button'] = [
-    '#type' => 'submit',
-    '#value' => t('Delete item'),
-  ];
-  return $form;
-}
-
-function datasets_gp_delete_form_submit($form, &$form_state) {
-  if ($form_state['values']['op'] == $form_state['values']['delete_button']) {
-    $item = $form['#item'];
-    db_delete('ds_gene_prediction')
-      ->condition('pid', $item)
-      ->execute();
-  }
-  $form_state['redirect'] = 'admin/structure/datasets/report';
-  drupal_set_message(t('The item has been deleted'));
-}
-
-function datasets_og_delete_form($form, &$form_state, $item) {
-  $form['#item'] = $item;
-  // Note confirm_form() can be used here, but I prefer to use my own for styling purposes
-  $form['header'] = [
-    '#markup' => t('Are you sure you wish to delete the item?'),
-    '#prefix' => '',
-    '#suffix' => '<br />',
-  ];
-  $form['warning'] = [
-    '#markup' => t('Warning, this action cannot be undone<br><br>'),
-    '#prefix' => '',
-    '#suffix' => '',
-  ];
-  $form['delete_button'] = [
-    '#type' => 'submit',
-    '#value' => t('Delete item'),
-  ];
-  return $form;
-}
-
-function datasets_og_delete_form_submit($form, &$form_state) {
-  if ($form_state['values']['op'] == $form_state['values']['delete_button']) {
-    $item = $form['#item'];
-    db_delete('ds_submissions')
-      ->condition('oa_id', $item)
-      ->execute();
-  }
-  $form_state['redirect'] = 'admin/structure/datasets/report';
-  drupal_set_message(t('The item has been deleted'));
-}
-
-
 function tripal_chado_datasets_report_callback($form, $form_state) {
   return $form['result'];
 }
@@ -620,15 +557,10 @@ function tripal_chado_datasets_report_callback($form, $form_state) {
 function tripal_chado_datasets_information_import() {
   $output = "";
 
-  // db_query("INSERT INTO {public.ds_gene_prediction} (pid, uid, organism, program, version, additional_info, other_methods, name, email, affiliation, gene_name, gene_version, descriptive_track, is_ogs, reason, is_publish, publish_field_data, is_download, filename, md5sum, sha512, created) VALUES (1, 768, 'blager', 'Maker', '2.31.8', NULL, '', 'Evelien Jongepier', 'e.jongepier@uni-muenster.de', 'Westfaelische Wilhelms-University - Institute for Evolution and Biodiversity - Evolutionary Bioinformatics Group', 'BGER_v0.6.2', '0.6.2', 'BGER_v0.6.2-Models', 'No', NULL, 'No', 'Yes', 'Yes', 'BGER_v0.6.2.gff', '5201aa3ff85506bd8a2713f29336ba92', NULL, 1480083060)");
+  //Leaving in a single one of these, presumably as an example.
 
   //  db_query("INSERT INTO {public.ds_organism_assembly} (oa_id, uid, name, email, organism, common_name, description, organism_image_url, is_curate_assembly, is_same, manual_curation_name, manual_curation_email, need_assistance, reason, time_from, time_to, no_timeframe, assembly_name, assembly_version, assembly_accession, assembly_method, is_publish, publish_field_data, other_notes, geo_location, tissues_located, gender, other_gender, data_source_strain, data_source_notes, data_source_seqplatform, data_source_url, filename, md5sum, sha512, created) VALUES (1, 752, 'Hugh Robertson', 'hughrobe@life.illinois.edu', 'cepcin', 'Wheat stem sawfly', 'will be provided soon', '', 'Yes', 1, 'Hugh Robertson', 'hughrobe@life.illinois.edu', 'No', NULL, 0, 0, 1, 'Cephus_cinctus, Ccin1', '1', 'GCA_000341935.1', 'SOAPdenovo  v. 2.04', 'No', 'yes', '', 'USA:Montana:Amsterdam-Churchill', 'whole individual', 'Male', NULL, '', '', 'Illumina GAIIx/Hi-Seq 2000', '', 'GCF_000341935.1_Ccin1_genomic.fna.gz', '685432a8ab91bafe73267ebf0ea86968', NULL, 1470157024)");
 
-  //  db_query("INSERT INTO {public.ds_organism_assembly (oa_id, uid, name, email, organism, common_name, description, organism_image_url, is_curate_assembly, is_same, manual_curation_name, manual_curation_email, need_assistance, reason, time_from, time_to, no_timeframe, assembly_name, assembly_version, assembly_accession, assembly_method, is_publish, publish_field_data, other_notes, geo_location, tissues_located, gender, other_gender, data_source_strain, data_source_notes, data_source_seqplatform, data_source_url, filename, md5sum, sha512, created) VALUES (2, 752, 'Hugh Robertson', 'hughrobe@life.illinois.edu', 'diaall', 'Parasitoid wasp', 'provided soon', '', 'Yes', 1, 'Hugh Robertson', 'hughrobe@life.illinois.edu', 'No', NULL, 0, 0, 1, 'Diachasma_alloeum, Dall1.0', '1', 'GCA_001412515.1', 'SOAPdenovo v. 2.04; PBJelly v. JULY-2014', 'No', 'yes', '', 'USA:Michigan:Grant', 'whole individual', 'Male', NULL, '', '', 'Illumina Hi-Seq 2000', '', 'GCF_001412515.1_Dall1.0_genomic.fna', '9d1ebcbf5fdd2fdb55bf7ff8d15753c1', NULL, 1470157370)");
-
-  //  db_query("INSERT INTO {public.ds_mapped_dataset (id, uid, organism, name, email, affiliation, geo_location, tissues_located, gender, other_gender, sequence_platform, is_publish, publish_field_data, descriptive_track, data_source_url, program, version, additional_info, other_methods, filename, md5sum, sha512, created) VALUES (1, 752, 'diaall', 'Kim Walden', 'k-walden@life.illinois.edu', 'University of Illinois at Urbana-Champaign', 'USA:Michigan:Grant', 'whole adult', 'Male', NULL, 'HiSeq2500', 'No', 'yes', 'adult_male', NULL, 'TopHat', '2.0.9', NULL, ',', 'Diachasma_alloeum_male_accepted_hits.bam,Diachasma_alloeum_male_accepted_hits.bam.bai', 'NA,NA', NULL, 1470773230)");
-
-  //  db_query("INSERT INTO {public.ds_mapped_dataset (id, uid, organism, name, email, affiliation, geo_location, tissues_located, gender, other_gender, sequence_platform, is_publish, publish_field_data, descriptive_track, data_source_url, program, version, additional_info, other_methods, filename, md5sum, sha512, created) VALUES (2, 752, 'diaall', 'Kim Walden', 'k-walden@life.illinois.edu', 'University of Illinois at Urbana-Champaign', 'USA:Michigan:Grant', 'whole adult', 'Female', NULL, 'HiSeq2500', 'No', 'yes', 'adult_female', NULL, 'TopHat', '2.0.9', NULL, ',', 'Diachasma_alloeum_female_accepted_hits.bam,Diachasma_alloeum_female_accepted_hits.bam.bai', 'NA,NA', NULL, 1470773393)");
 
   // Select table ds_gene_prediction
   $query = db_select("ds_gene_prediction", "gp");
