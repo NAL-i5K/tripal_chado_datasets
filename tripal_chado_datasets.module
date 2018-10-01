@@ -10,7 +10,7 @@ require_once 'includes/tripal_chado_datasets_submission.form.inc';
 require_once 'includes/tripal_chado_datasets.admin.inc';
 require_once 'includes/tripal_chado_datasets_mail.inc';
 require_once 'includes/DSTableSort.inc';
-require_once 'includes/views/organism_filter_in_operator';
+require_once 'includes/views/organism_filter_in_operator.inc';
 
 
 define('FROM_ADDRESS', '"NAL-i5k"<i5k@ars.usda.gov>');
