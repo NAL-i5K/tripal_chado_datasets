@@ -6,9 +6,6 @@
 
 function tripal_chado_datasets_request_form($form, &$form_state) {
 
-
-
-
   //i5k specific code.
   $link = $GLOBALS['base_url'] . '/long-term-i5k-workspace-project-management';
   if (drupal_valid_path($link)) {
@@ -16,7 +13,6 @@ function tripal_chado_datasets_request_form($form, &$form_state) {
       '#markup' => t('<div id="text">Please note that this dataset will be visible to the public in the JBrowse genome browser. Contact us if this dataset needs to remain private. Refer to our <a href="' . $GLOBALS['base_url'] . '/data-management-policy">data management</a> and <a href="' . $GLOBALS['base_url'] . '/long-term-i5k-workspace-project-management">long-term management policy</a> documents for information about the data types that we store and our long-term data management policy.</div><br>'),
     ];
   }
-
 
   $form['data_provider'] = [
     '#type' => 'fieldset',

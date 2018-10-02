@@ -35,6 +35,7 @@ function tripal_chado_datasets_mail($key, &$message, $params) {
     $file = file_load($params['upload']);
     $filename_md5sum = $file->filename . ' & ' . $filename_md5sum;
   }
+
   switch ($key) {
     //Sent by tripal_chado_datasets_request_project_submit.
     //(Create chado organism request ackowledgement).
@@ -56,13 +57,13 @@ function tripal_chado_datasets_mail($key, &$message, $params) {
       $message['subject'] = t('New project request for "' . $params['genus'] . ' ' . $params['species'] . '"', $variables, ['langcode' => $language->language]);
       //$variables required even if not used to get $language in there
       //the email body is here, inside the $message array
-      $message['body'][] = t($params['fullname'] . " requested for new project.<br><br><b>Below are the details:</b>", $variables, ['langcode' => $language->language]);
+      $message['body'][] = t("The user " . $params['fullname'] . " submitted a request for a new project.<br><br><b>Below are the details:</b>", $variables, ['langcode' => $language->language]);
       $message['body'][] = '<br><b>Genus:</b> ' . $params['genus'] . '
 <br><b>Species:</b> ' . $params['species'] . '
 <br><b>NCBI Taxid: </b>' . $params['ncbi_taxid'] . '
 <br><b>Common Name: </b>' . $params['common_name'] . '
 <br><b>Is the genome assembly already hosted at another genome portal, or is there another genome portal that would also be appropriate to host your dataset: </b>' . $params['genome_assembly_hosted'] . '
-<Br><b>Have you submitted the genome assembly to NCBI, or another INSDC member?: </b>' . $params['is_ncbi_submitted'] . '
+<br><b>Have you submitted the genome assembly to NCBI, or another INSDC member?: </b>' . $params['is_ncbi_submitted'] . '
 <br><b>Is this a re-assembly or new assembly of an existing organism on the site? :</b> ' . $params['is_assembly'] . '
 <br><b>Were you involved in the generation of this genome assembly? : </b>' . $params['involved_in_generation'];
 
@@ -70,7 +71,7 @@ function tripal_chado_datasets_mail($key, &$message, $params) {
 <br><b>Email:</b> ' . $params['email'];
       $message['body'][] = "<br><br>To view more click the <a href='" . $GLOBALS['base_url'] . "/admin/structure/datasets'>Admin</a> Link";
 
-      $message['body'][] = '<br><BR>Best,<br><br>' . $site_name . ' team';
+      $message['body'][] = '<br><BR>Best, <br><br>' . $site_name . ' team';
       $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
 
       break;
@@ -80,7 +81,7 @@ function tripal_chado_datasets_mail($key, &$message, $params) {
 
       $message['subject'] = t($site_name . ' Project Request Approved for "' . $params['genus'] . ' ' . $params['species'] . '"', $variables, ['langcode' => $language->language]);
       $message['body'][] = "Dear " . $params['fullname'] . ", <br><br>We have approved your project request for " . $params['genus'] . ' ' . $params['species'] . ".";
-      $message['body'][] = '<br>You can submit your datasets. Please visit <a href=' . $base_url . '"/datasets/submit-a-dataset"> ' . $base_url . '/datasets/submit-a-dataset</a> to submit.<Br><br>Best,<br><bR>' . $site_name . ' team';
+      $message['body'][] = '<br>You can submit your datasets. Please visit <a href=' . $base_url . '"/datasets/submit-a-dataset"> ' . $base_url . '/datasets/submit-a-dataset</a> to submit.<Br><br>Best, <br><bR>' . $site_name . ' team';
       $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
       break;
 
@@ -191,7 +192,7 @@ function tripal_chado_datasets_mail($key, &$message, $params) {
       $message_body .= "<br><b>Filename & SHA512 </b>:";
       $message_body .= "<br>" . $filename_md5sum . "<br>";
       $message['body'][] = $message_body;
-      $message['body'][] = '<br><br>Best,<br><br>' . $site_name . ' team';
+      $message['body'][] = '<br><br>Best, <br><br>' . $site_name . ' team';
       $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
       break;
   }
