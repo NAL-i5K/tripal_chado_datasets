@@ -181,17 +181,15 @@ function tripal_chado_datasets_request_project_submit($form, &$form_state) {
   //Send the e-mail to the recipients using the site default language.
   $to_user = $values['email'];
 
-  $from_address = variable_get('tripal_chado_datasets_FROM_ADDRESS');
+  $from_address = variable_get('site_mail', ini_get('sendmail_from'));
+
   $send_user = drupal_mail('tripal_chado_datasets', 'confirm_user_organism_submission', $to_user, language_default(), $data, $from_address, TRUE);
   if (empty($send_user['result']) || ($send_user['result'] != 1)) {
     drupal_set_message(t('Failed to send e-mail to the submitted user.'));
   }
-
-  //TODO: why do we use the same variable here for recipient?
-  $recipient = variable_get('tripal_chado_datasets_FROM_ADDRESS');
-
+  
   $from = $values['email'];
-  $sent = drupal_mail('tripal_chado_datasets', 'request_project_email', $recipient, language_default(), $data, $from, TRUE);
+  $sent = drupal_mail('tripal_chado_datasets', 'request_project_email', $from_address, language_default(), $data, $from, TRUE);
   if (empty($sent['result']) || ($sent['result'] != 1)) {
     /*handle send fail, $sent ===false when mail fails, but it won't always recognize a failure*/
     drupal_set_message(t('Failed to send e-mail to the admin.'));
