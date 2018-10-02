@@ -134,7 +134,8 @@ function tripal_chado_datasets_organism_approval($form, &$form_state, $id) {
 /**
  * @hook_form_submit()
  *
- * @sends an email to user regarding login credentials to the web apollo site.
+ * Lets users know that their project request was approved (IE the chado organism was created and they can not submit a Chado analysis request).
+ *
  */
 function tripal_chado_datasets_organism_approval_submit($form, &$form_state) {
   $values = $form_state['values']['datasets_table'];
@@ -157,7 +158,7 @@ function tripal_chado_datasets_organism_approval_submit($form, &$form_state) {
       ->fields(['status' => $status])
       ->condition('id', $id, '=')
       ->execute();
-    //   Send email to the user about the login credentials to the web apollo site
+
     $user_email_sent = drupal_mail('tripal_chado_datasets', 'request_project_approved_email', $to, language_default(), $values, $from, TRUE);
 
     // $is_species_exists = db_select('chado.organism', 'o')->fields('o', array('organism_id'))->condition('o.genus', $genus, 'LIKE')->condition('o.species', $species, 'LIKE')->execute()->fetchField();

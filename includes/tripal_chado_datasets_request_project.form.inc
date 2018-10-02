@@ -182,7 +182,7 @@ function tripal_chado_datasets_request_project_submit($form, &$form_state) {
   $to_user = $values['email'];
 
   $from_address = variable_get('tripal_chado_datasets_FROM_ADDRESS');
-  $send_user = drupal_mail('tripal_chado_datasets', 'email_acknowledgement_touser', $to_user, language_default(), $data, $from_address, TRUE);
+  $send_user = drupal_mail('tripal_chado_datasets', 'confirm_user_organism_submission', $to_user, language_default(), $data, $from_address, TRUE);
   if (empty($send_user['result']) || ($send_user['result'] != 1)) {
     drupal_set_message(t('Failed to send e-mail to the submitted user.'));
   }
