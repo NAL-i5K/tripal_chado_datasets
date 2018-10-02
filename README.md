@@ -17,15 +17,11 @@ To see this module in action, pleas visit https://i5k.nal.usda.gov/datasets/subm
 https://www.drupal.org/files/issues/1395184_31.patch
 
 
-### Set the admin email variable
+### Configure your site
+
+Make sure that the site name and email variables are set for your site, as these will be used in the email messages sent to admins and users.  You can check your configuration at `/admin/config/system/site-information`
 
 
-At the start of the module file, you modify this line of code defining the `tripal_chado_datasets_FROM_ADDRESS` variable to use your site's admin email address.
-
-
-```php
-variable_set('tripal_chado_datasets_FROM_ADDRESS', '"Sample Address"<example@example.gov>');
-```
 
 ### More
 

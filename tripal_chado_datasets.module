@@ -12,9 +12,6 @@ require_once 'includes/tripal_chado_datasets_mail.inc';
 require_once 'includes/DSTableSort.inc';
 require_once 'includes/views/organism_filter_in_operator.inc';
 
-
-variable_set('tripal_chado_datasets_FROM_ADDRESS', '"Sample Address"<example@example.gov>');
-
 /**
  * Implementation of hook_init().
  */
