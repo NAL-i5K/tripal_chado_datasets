@@ -5,7 +5,7 @@
  *  Registration form for project or dataset submission account
  */
 
-function tripal_chado_datasets_project_submission_account($form, &$form_state) {
+function tripal_chado_datasets_account_request_form($form, &$form_state) {
   $form['#attached']['css'] = [
     drupal_get_path('module', 'tripal_chado_datasets') . '/css/project-dataset.css',
   ];
@@ -62,7 +62,7 @@ function tripal_chado_datasets_project_submission_account($form, &$form_state) {
 /**
  *  hook_form_validate()
  */
-function tripal_chado_datasets_project_submission_account_validate($form, & $form_state) {
+function tripal_chado_datasets_account_request_form_validate($form, & $form_state) {
   $values = $form_state['values'];
   $name = $values['name'];
 
@@ -106,7 +106,7 @@ Affiliation can only contains numbers, letters @  - _.'));
 /**
  * hook_form_submit()
  */
-function tripal_chado_datasets_project_submission_account_submit($form, & $form_state) {
+function tripal_chado_datasets_account_request_form_submit($form, & $form_state) {
   $values = $form_state['values'];
   // echo "<pre>"; print_r($values);echo "</pre>";
 

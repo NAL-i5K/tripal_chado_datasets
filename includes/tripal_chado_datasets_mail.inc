@@ -86,7 +86,7 @@ function tripal_chado_datasets_mail($key, &$message, $params) {
       break;
 
     case 'register_project_submission_account':
-      //sent in tripal_chado_datasets_project_submission_account_submit
+      //sent in tripal_chado_datasets_account_request_form_submit
       //request an account to submit data.
 
       $message['subject'] = t("" . $params['name'] . " registered for project or data submission account", $variables, ['langcode' => $language->language]);
