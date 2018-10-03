@@ -65,6 +65,7 @@ function tripal_chado_datasets_request_form($form, &$form_state) {
     '#required' => TRUE,
     '#prefix' => '<div class="col-lg-6">',
     '#suffix' => '</div>',
+    '#default_value' => 0
   ];
 
   $form['general_information']['dataset_name'] = [
@@ -200,38 +201,11 @@ function tripal_chado_datasets_request_form($form, &$form_state) {
     '#suffix' => '</div>',
   ];
 
-  // $form['assembly']['project']['species'] = array(
-  //   '#type' => 'fieldset',
-  //   '#prefix' => '<div id="species">',
-  //   '#suffix' => '</div>',
-  // );
-  // if (!empty($form_state['input']['organism']) && ($form_state['input']['organism'] != 'New Organism')) {
-  //   $species = $organism_options[$form_state['input']['organism']];
-  //   $organism_result = db_query("SELECT common_name FROM {chado.organism} WHERE concat(genus,' ',species) = :species", array(':species' => $species))->fetchObject();
-  //   $common_name = (!empty($form_state['input']['common_name']))?$form_state['input']['common_name']:'';
-  //   $attributes = array();
-  //   if (isset($organism_result->common_name) && !empty($organism_result->common_name)) {
-  //     $common_name = $organism_result->common_name;
-  //     $attributes =  array('readonly' => 'readonly');
-  //   }
-
-  //   $form['assembly']['project']['species']['common_name'] = array(
-  //     '#type' => 'textfield',
-  //     '#title' => t('Common Name'),
-  //     '#value' => $common_name,
-  //     '#maxlength' => 255,
-  //     '#attributes' => $attributes,
-  //     '#required' => FALSE,
-  //   );
-  // }
-
   $form['assembly']['project']['description'] = [
     '#type' => 'textarea',
     '#title' => t('Project description to display in your organism page'),
     '#required' => FALSE,
   ];
-  global $base_url;
-  global $base_path;
 
   $curate_options = ['' => '-Select-', 'Yes' => 'Yes', 'No' => 'No'];
   $form['assembly']['project']['is_curate_assembly'] = [
