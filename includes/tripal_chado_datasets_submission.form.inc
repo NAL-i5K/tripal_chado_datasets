@@ -57,6 +57,8 @@ function tripal_chado_datasets_request_form($form, &$form_state) {
 
   $organism_options = chado_get_organism_select_options(FALSE);
 
+  unset($organism_options[0]);
+
   $form['general_information']['organism'] = [
     '#type' => 'select',
     '#title' => t('Organism'),
@@ -65,7 +67,7 @@ function tripal_chado_datasets_request_form($form, &$form_state) {
     '#required' => TRUE,
     '#prefix' => '<div class="col-lg-6">',
     '#suffix' => '</div>',
-    '#default_value' => 0
+    '#empty_option' => 'Select an organism'
   ];
 
   $form['general_information']['dataset_name'] = [
