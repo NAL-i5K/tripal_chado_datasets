@@ -60,10 +60,17 @@ An email is sent to the user when the request is approved (but not if it is reje
 
 **Note**: if running a Tripal 3 site, organism records will be inserted into Chado after approving a request at `admin/structure/datasets` in the "Request Project List" tab.  They will not be available to users until they are **published**.  Visit `admin -> Content Types -> Tripal Content types -> Publish` after approving an organism to publish it.
 
-### Analysis requests
+### Analysis requests (datasets)
 
-Coming soon
+Users request the creation of an analysis at `datasets/submit-a-dataset`.  They will select their previously submitted organism from the dropdown box, and fill out requested information which will be stored in Chado in the analysis table.
 
+![analysis request table](docs/request_analysis.png)
+
+After the user presses submit, email notifications will go out to users and admins as before.
+
+User requests can be viewed by the admin at `/admin/structure/datasets/report`.  Clicking "Edit" on a given dataset will let you view the details of the proposed record.
+
+**Note**: Currently there is no way to automatically create the requested analysis.  This feature is coming soon.
 
 
 ### Module customization

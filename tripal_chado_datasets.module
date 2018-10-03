@@ -28,7 +28,7 @@ function tripal_chado_datasets_menu() {
   $items = [];
 
 
-  //Form to request a chado ANALYSIS
+  //Form to request a chado Analysis
   $items['datasets/submit-a-dataset'] = [
     'title' => 'Add Mapped dataset, Genome assembly, Gene Prediction Information',
     'page callback' => 'drupal_get_form',
@@ -43,7 +43,7 @@ function tripal_chado_datasets_menu() {
 
   $items['datasets/%/view'] = [
     'title' => 'View dataset information',
-    'page callback' => 'datasets_information_view',
+    'page callback' => 'tripal_chado_datasets_information_view',
     'page arguments' => [1],
     'access arguments' => ['administer datasets'],
     'type' => MENU_CALLBACK,
@@ -68,14 +68,6 @@ function tripal_chado_datasets_menu() {
     'file' => 'includes/tripal_chado_datasets.admin.inc',
   ];
 
-  $items['datasets/dataimport'] = [
-    'title' => 'Import dataset information',
-    'page callback' => 'tripal_chado_datasets_information_import',
-    'page arguments' => [1],
-    'access arguments' => ['administer datasets'],
-    'type' => MENU_CALLBACK,
-    'file' => 'includes/tripal_chado_datasets.admin.inc',
-  ];
 
   //Form to request creating a chado organism.
   $items['datasets/request-project'] = [
@@ -90,14 +82,17 @@ function tripal_chado_datasets_menu() {
     'file_path' => drupal_get_path('module', 'tripal_chado_datasets'),
   ];
 
+  //Form to create an account
+  //TODO provide instructions for configuring Drupal account requests instead.
+
   $items['register/project-dataset/account'] = [
     'title' => 'Register for a Project or Dataset Submission Account',
     'page callback' => 'drupal_get_form',
-    'page arguments' => ['tripal_chado_datasets_project_submission_account'],
+    'page arguments' => ['tripal_chado_datasets_account_request_form'],
     'access arguments' => ['access register form'],
     'type' => MENU_CALLBACK,
     'weight' => 100,
-    'file' => 'includes/tripal_chado_datasets_tripal_chado_datasets_project_submission_account.form.inc',
+    'file' => 'includes/tripal_chado_datasets_account_request.form.inc',
     'file_path' => drupal_get_path('module', 'tripal_chado_datasets'),
   ];
 
@@ -129,6 +124,18 @@ function tripal_chado_datasets_menu() {
     'type' => MENU_LOCAL_TASK,
     'file' => 'includes/tripal_chado_datasets.admin.inc',
   ];
+
+  //I've removed this form because I don't know that it has a purpose.
+  //The callback is commented out as well.
+
+  //  $items['datasets/dataimport'] = [
+  //    'title' => 'Import dataset information',
+  //    'page callback' => 'tripal_chado_datasets_information_import',
+  //    'page arguments' => [1],
+  //    'access arguments' => ['administer datasets'],
+  //    'type' => MENU_CALLBACK,
+  //    'file' => 'includes/tripal_chado_datasets.admin.inc',
+  //  ];
 
   return $items;
 }
@@ -200,7 +207,7 @@ function tripal_chado_datasets_captcha($op, $captcha_type = '') {
  */
 function tripal_chado_datasets_information_view($oa_id) {
   $query = db_select('ds_submissions', 'os');
-  $query->fields("os", 'organism');
+  $query->fields("os");
   $query->condition("oa_id", $oa_id);
   $result = $query->execute()->fetchAll();
 
@@ -210,7 +217,7 @@ function tripal_chado_datasets_information_view($oa_id) {
   $result[0]->organism = $organism->common_name;
 
   $output = '';
-
+  
   if ($result[0]->dataset_type == 'Assembly') {
     $output = theme('assembly_information_view', ['data' => $result]);
   }
@@ -409,8 +416,8 @@ function ds_tablesort_header($cell, $header, $ts) {
 function tripal_chado_datasets_theme() {
   $core_path = drupal_get_path('module', 'tripal_chado_datasets');
   return [
-    'tripal_chado_datasets_organism_approval' => [
-      'template' => 'tripal_chado_datasets_organism_approval',
+    'datasets_organism_approval' => [
+      'template' => 'datasets_organism_approval',
       'render element' => 'form',
       'path' => $core_path . "/theme/templates",
     ],
