@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/NAL-i5K/tripal_chado_datasets.svg?branch=master)](https://travis-ci.org/NAL-i5K/tripal_chado_datasets)
+
+
 Module status **under development, not suitable for deployment**.
 
 The datasets module provides forms for users to submit data.  This includes: 
