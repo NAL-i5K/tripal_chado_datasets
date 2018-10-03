@@ -11,12 +11,14 @@ function tripal_chado_datasets_request_project($form, &$form_state) {
     drupal_get_path('module', 'tripal_chado_datasets') . '/css/request_project.css',
   ];
 
-
-  //i5k specific code.
-  $link = $GLOBALS['base_url'] . '/long-term-i5k-workspace-project-management';
-  if (drupal_valid_path($link)) {
+  if (drupal_valid_path('long-term-i5k-workspace-project-management') && drupal_valid_path('data-management-policy')) {
     $form['header_text'] = [
       '#markup' => '<div id="text">Thank you for your interest in submitting your genome project to the i5k Workspace! Please answer the following questions to help us decide if the resources at the i5k Workspace are a good fit for your project. Refer to our <a href="' . $GLOBALS['base_url'] . '/data-management-policy">data management</a> and <a href="' . $GLOBALS['base_url'] . '/long-term-i5k-workspace-project-management">long-term management policy</a> documents for information about the data types that we store and our long-term data management policy.</div>',
+    ];
+  }
+  else {
+    $form['header_text'] = [
+      '#markup' => '<div id="text">Thank you for your interest in submitting your genome project! Please answer the following questions to help us decide if our resources are a good fit for your project.</div>',
     ];
   }
 
@@ -187,7 +189,7 @@ function tripal_chado_datasets_request_project_submit($form, &$form_state) {
   if (empty($send_user['result']) || ($send_user['result'] != 1)) {
     drupal_set_message(t('Failed to send e-mail to the submitted user.'));
   }
-  
+
   $from = $values['email'];
   $sent = drupal_mail('tripal_chado_datasets', 'request_project_email', $from_address, language_default(), $data, $from, TRUE);
   if (empty($sent['result']) || ($sent['result'] != 1)) {
