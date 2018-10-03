@@ -45,7 +45,7 @@ function tripal_chado_datasets_organism_approval($form, &$form_state, $id) {
   $form['datasets_table'] = [
     '#tree' => TRUE, // Need this for easy submit processing
     '#header' => $header, // We trick Drupal to pass our $header to theme here
-    '#theme' => 'tripal_chado_datasets_organism_approval',
+    '#theme' => 'datasets_organism_approval',
   ];
   $form['datasets_table']['fullname'] = [
     '#type' => 'value',
@@ -134,7 +134,8 @@ function tripal_chado_datasets_organism_approval($form, &$form_state, $id) {
 /**
  * @hook_form_submit()
  *
- * Lets users know that their project request was approved (IE the chado organism was created and they can not submit a Chado analysis request).
+ * Lets users know that their project request was approved (IE the chado
+ *   organism was created and they can not submit a Chado analysis request).
  *
  */
 function tripal_chado_datasets_organism_approval_submit($form, &$form_state) {
@@ -248,11 +249,11 @@ function tripal_chado_datasets_organism_approval_submit($form, &$form_state) {
      *******************************************************************************************/
     //Displaying status message on the site
     $status = ($status == 1) ? 'Approved' : 'Rejected';
-    drupal_set_message(t('%genus %species status was changed to %status'), [
+    drupal_set_message(t('%genus %species status was changed to %status', [
       '%genus' => $values['genus'],
       '%species' => $values['species'],
       '%status' => $status,
-    ], $type = 'status');
+    ]), $type = 'status');
 
   }
   elseif ($status == 0) {
@@ -555,140 +556,6 @@ function tripal_chado_datasets_report_callback($form, $form_state) {
 }
 
 
-function tripal_chado_datasets_information_import() {
-  $output = "";
-
-  //Leaving in a single one of these, presumably as an example.
-
-  //  db_query("INSERT INTO {public.ds_organism_assembly} (oa_id, uid, name, email, organism, common_name, description, organism_image_url, is_curate_assembly, is_same, manual_curation_name, manual_curation_email, need_assistance, reason, time_from, time_to, no_timeframe, assembly_name, assembly_version, assembly_accession, assembly_method, is_publish, publish_field_data, other_notes, geo_location, tissues_located, gender, other_gender, data_source_strain, data_source_notes, data_source_seqplatform, data_source_url, filename, md5sum, sha512, created) VALUES (1, 752, 'Hugh Robertson', 'hughrobe@life.illinois.edu', 'cepcin', 'Wheat stem sawfly', 'will be provided soon', '', 'Yes', 1, 'Hugh Robertson', 'hughrobe@life.illinois.edu', 'No', NULL, 0, 0, 1, 'Cephus_cinctus, Ccin1', '1', 'GCA_000341935.1', 'SOAPdenovo  v. 2.04', 'No', 'yes', '', 'USA:Montana:Amsterdam-Churchill', 'whole individual', 'Male', NULL, '', '', 'Illumina GAIIx/Hi-Seq 2000', '', 'GCF_000341935.1_Ccin1_genomic.fna.gz', '685432a8ab91bafe73267ebf0ea86968', NULL, 1470157024)");
-
-
-  // Select table ds_gene_prediction
-  $query = db_select("ds_gene_prediction", "gp");
-  // Select fields
-  $query->fields("gp");
-
-  // Execute query
-  $result = $query->execute();
-
-  // Looping for filling the table rows  
-  while ($row = $result->fetchObject()) {
-    $data['uid'] = $row->uid;
-    $data['organism'] = $row->organism;
-    $data['program'] = $row->program;
-    $data['version'] = $row->version;
-    $data['additional_info'] = $row->additional_info;
-    $data['methods_citation'] = $row->other_methods;
-    $data['name'] = $row->name;
-    $data['email'] = $row->email;
-    $data['affiliation'] = $row->affiliation;
-    $data['dataset_name'] = $row->gene_name;
-    $data['dataset_version'] = $row->gene_version;
-    $data['gene_set_descriptive_track'] = $row->descriptive_track;
-    $data['is_ogs'] = $row->is_ogs;
-    $data['reason'] = $row->reason;
-    $data['is_download'] = $row->is_download;
-    $data['filename'] = $row->filename;
-    $data['md5sum'] = $row->md5sum;
-    $data['sha512'] = $row->sha512;
-    $data['created'] = $row->created;
-    $data['dataset_type'] = 'Gene prediction';
-    $names = implode(', ', array_keys($data));
-    $values = implode("', '", array_values($data));
-    db_query("insert into {public.ds_submissions}($names) values('$values')");
-  }
-
-  // Select table ds_mapped_dataset
-  unset($data);
-  $query = db_select("ds_mapped_dataset", "gp");
-  // Select fields
-  $query->fields("gp");
-
-  // Execute query
-  $result = $query->execute();
-
-  // Looping for filling the table rows  
-  while ($row = $result->fetchObject()) {
-    $data['uid'] = $row->uid;
-    $data['organism'] = $row->organism;
-    $data['name'] = $row->name;
-    $data['email'] = $row->email;
-    $data['affiliation'] = $row->affiliation;
-    $data['mapped_dataset_geo_location'] = $row->geo_location;
-    $data['mapped_dataset_tissues_located'] = $row->tissues_located;
-    $data['mapped_gender'] = $row->gender;
-    $data['other_gender'] = $row->other_gender;
-    $data['sequence_platform'] = $row->sequence_platform;
-    $data['mapped_dataset_descriptive_track'] = $row->descriptive_track;
-    $data['mapped_data_source_url'] = $row->data_source_url;
-    $data['program'] = $row->program;
-    $data['version'] = $row->version;
-    $data['additional_info'] = $row->additional_info;
-    $data['methods_citation'] = $row->other_methods;
-    $data['filename'] = $row->filename;
-    $data['md5sum'] = $row->md5sum;
-    $data['sha512'] = $row->sha512;
-    $data['created'] = $row->created;
-    $data['dataset_type'] = 'Mapped dataset';
-    $names = implode(', ', array_keys($data));
-    $values = implode("', '", array_values($data));
-    db_query("insert into {public.ds_submissions}($names) values('$values')");
-  }
-
-
-  // Select table ds_organism_assembly
-  unset($data);
-  $query = db_select("ds_organism_assembly", "gp");
-  // Select fields
-  $query->fields("gp");
-
-  // Execute query
-  $result = $query->execute();
-
-  // Looping for filling the table rows  
-  while ($row = $result->fetchObject()) {
-    $data['uid'] = $row->uid;
-    $data['name'] = $row->name;
-    $data['email'] = $row->email;
-    $data['organism'] = $row->organism;
-    $data['description'] = $row->description;
-    $data['is_curate_assembly'] = $row->is_curate_assembly;
-    $data['is_same'] = $row->is_same;
-    $data['manual_curation_name'] = $row->manual_curation_name;
-    $data['manual_curation_email'] = $row->manual_curation_email;
-    $data['need_assistance'] = $row->need_assistance;
-    $data['reason'] = $row->reason;
-    $data['time_from'] = $row->time_from;
-    $data['time_to'] = $row->time_to;
-    $data['no_timeframe'] = $row->no_timeframe;
-    $data['dataset_name'] = $row->assembly_name;
-    $data['dataset_version'] = $row->assembly_version;
-    $data['methods_citation'] = $row->assembly_method;
-    $data['dataset_is_publish'] = $row->is_publish;
-    $data['dataset_publish_field_data'] = $row->publish_field_data;
-    $data['other_notes'] = $row->other_notes;
-    $data['assembly_geo_location'] = $row->geo_location;
-    $data['assembly_tissues_located'] = $row->tissues_located;
-    $data['assembly_gender'] = $row->gender;
-    $data['other_gender'] = $row->other_gender;
-    $data['data_source_strain'] = $row->data_source_strain;
-    $data['data_source_notes'] = $row->data_source_notes;
-    $data['data_source_seqplatform'] = $row->data_source_seqplatform;
-    $data['assembly_data_source_url'] = $row->data_source_url;
-    $data['filename'] = $row->filename;
-    $data['md5sum'] = $row->md5sum;
-    $data['sha512'] = $row->sha512;
-    $data['created'] = $row->created;
-    $data['dataset_type'] = 'Assembly';
-    $names = implode(', ', array_keys($data));
-    $values = implode("', '", array_values($data));
-    db_query("insert into {public.ds_submissions}($names) values('$values')");
-  }
-
-  return $output;
-}
-
-
 /**
  *  Admin interface to approve/reject the organisms add by the
  * co-ordinators. This is the "Request project list" tab.
@@ -803,3 +670,141 @@ function tripal_chado_datasets_dataset_coordinator_organisms() {
   return $output;
 }
 
+
+
+/**
+ * NOTE: this function is not called and is therefore deprecated and commented
+ * out.  I'm leaving it for now in case we have some use for it later.
+ */
+//function tripal_chado_datasets_information_import() {
+//  $output = "";
+//
+//  //Leaving in a single one of these, presumably as an example.
+//
+//  //  db_query("INSERT INTO {public.ds_organism_assembly} (oa_id, uid, name, email, organism, common_name, description, organism_image_url, is_curate_assembly, is_same, manual_curation_name, manual_curation_email, need_assistance, reason, time_from, time_to, no_timeframe, assembly_name, assembly_version, assembly_accession, assembly_method, is_publish, publish_field_data, other_notes, geo_location, tissues_located, gender, other_gender, data_source_strain, data_source_notes, data_source_seqplatform, data_source_url, filename, md5sum, sha512, created) VALUES (1, 752, 'Hugh Robertson', 'hughrobe@life.illinois.edu', 'cepcin', 'Wheat stem sawfly', 'will be provided soon', '', 'Yes', 1, 'Hugh Robertson', 'hughrobe@life.illinois.edu', 'No', NULL, 0, 0, 1, 'Cephus_cinctus, Ccin1', '1', 'GCA_000341935.1', 'SOAPdenovo  v. 2.04', 'No', 'yes', '', 'USA:Montana:Amsterdam-Churchill', 'whole individual', 'Male', NULL, '', '', 'Illumina GAIIx/Hi-Seq 2000', '', 'GCF_000341935.1_Ccin1_genomic.fna.gz', '685432a8ab91bafe73267ebf0ea86968', NULL, 1470157024)");
+//
+//
+//  // Select table ds_gene_prediction
+//  $query = db_select("ds_gene_prediction", "gp");
+//  // Select fields
+//  $query->fields("gp");
+//
+//  // Execute query
+//  $result = $query->execute();
+//
+//  // Looping for filling the table rows
+//  while ($row = $result->fetchObject()) {
+//    $data['uid'] = $row->uid;
+//    $data['organism'] = $row->organism;
+//    $data['program'] = $row->program;
+//    $data['version'] = $row->version;
+//    $data['additional_info'] = $row->additional_info;
+//    $data['methods_citation'] = $row->other_methods;
+//    $data['name'] = $row->name;
+//    $data['email'] = $row->email;
+//    $data['affiliation'] = $row->affiliation;
+//    $data['dataset_name'] = $row->gene_name;
+//    $data['dataset_version'] = $row->gene_version;
+//    $data['gene_set_descriptive_track'] = $row->descriptive_track;
+//    $data['is_ogs'] = $row->is_ogs;
+//    $data['reason'] = $row->reason;
+//    $data['is_download'] = $row->is_download;
+//    $data['filename'] = $row->filename;
+//    $data['md5sum'] = $row->md5sum;
+//    $data['sha512'] = $row->sha512;
+//    $data['created'] = $row->created;
+//    $data['dataset_type'] = 'Gene prediction';
+//    $names = implode(', ', array_keys($data));
+//    $values = implode("', '", array_values($data));
+//    db_query("insert into {public.ds_submissions}($names) values('$values')");
+//  }
+//
+//  // Select table ds_mapped_dataset
+//  unset($data);
+//  $query = db_select("ds_mapped_dataset", "gp");
+//  // Select fields
+//  $query->fields("gp");
+//
+//  // Execute query
+//  $result = $query->execute();
+//
+//  // Looping for filling the table rows
+//  while ($row = $result->fetchObject()) {
+//    $data['uid'] = $row->uid;
+//    $data['organism'] = $row->organism;
+//    $data['name'] = $row->name;
+//    $data['email'] = $row->email;
+//    $data['affiliation'] = $row->affiliation;
+//    $data['mapped_dataset_geo_location'] = $row->geo_location;
+//    $data['mapped_dataset_tissues_located'] = $row->tissues_located;
+//    $data['mapped_gender'] = $row->gender;
+//    $data['other_gender'] = $row->other_gender;
+//    $data['sequence_platform'] = $row->sequence_platform;
+//    $data['mapped_dataset_descriptive_track'] = $row->descriptive_track;
+//    $data['mapped_data_source_url'] = $row->data_source_url;
+//    $data['program'] = $row->program;
+//    $data['version'] = $row->version;
+//    $data['additional_info'] = $row->additional_info;
+//    $data['methods_citation'] = $row->other_methods;
+//    $data['filename'] = $row->filename;
+//    $data['md5sum'] = $row->md5sum;
+//    $data['sha512'] = $row->sha512;
+//    $data['created'] = $row->created;
+//    $data['dataset_type'] = 'Mapped dataset';
+//    $names = implode(', ', array_keys($data));
+//    $values = implode("', '", array_values($data));
+//    db_query("insert into {public.ds_submissions}($names) values('$values')");
+//  }
+//
+//
+//  // Select table ds_organism_assembly
+//  unset($data);
+//  $query = db_select("ds_organism_assembly", "gp");
+//  // Select fields
+//  $query->fields("gp");
+//
+//  // Execute query
+//  $result = $query->execute();
+//
+//  // Looping for filling the table rows
+//  while ($row = $result->fetchObject()) {
+//    $data['uid'] = $row->uid;
+//    $data['name'] = $row->name;
+//    $data['email'] = $row->email;
+//    $data['organism'] = $row->organism;
+//    $data['description'] = $row->description;
+//    $data['is_curate_assembly'] = $row->is_curate_assembly;
+//    $data['is_same'] = $row->is_same;
+//    $data['manual_curation_name'] = $row->manual_curation_name;
+//    $data['manual_curation_email'] = $row->manual_curation_email;
+//    $data['need_assistance'] = $row->need_assistance;
+//    $data['reason'] = $row->reason;
+//    $data['time_from'] = $row->time_from;
+//    $data['time_to'] = $row->time_to;
+//    $data['no_timeframe'] = $row->no_timeframe;
+//    $data['dataset_name'] = $row->assembly_name;
+//    $data['dataset_version'] = $row->assembly_version;
+//    $data['methods_citation'] = $row->assembly_method;
+//    $data['dataset_is_publish'] = $row->is_publish;
+//    $data['dataset_publish_field_data'] = $row->publish_field_data;
+//    $data['other_notes'] = $row->other_notes;
+//    $data['assembly_geo_location'] = $row->geo_location;
+//    $data['assembly_tissues_located'] = $row->tissues_located;
+//    $data['assembly_gender'] = $row->gender;
+//    $data['other_gender'] = $row->other_gender;
+//    $data['data_source_strain'] = $row->data_source_strain;
+//    $data['data_source_notes'] = $row->data_source_notes;
+//    $data['data_source_seqplatform'] = $row->data_source_seqplatform;
+//    $data['assembly_data_source_url'] = $row->data_source_url;
+//    $data['filename'] = $row->filename;
+//    $data['md5sum'] = $row->md5sum;
+//    $data['sha512'] = $row->sha512;
+//    $data['created'] = $row->created;
+//    $data['dataset_type'] = 'Assembly';
+//    $names = implode(', ', array_keys($data));
+//    $values = implode("', '", array_values($data));
+//    db_query("insert into {public.ds_submissions}($names) values('$values')");
+//  }
+//
+//  return $output;
+//}
