@@ -201,39 +201,6 @@ function tripal_chado_datasets_captcha($op, $captcha_type = '') {
 
 
 /**
- * Assembly information view
- *
- * @param $oa_id | ds_submissions.oa_id
- *
- * @return string
- */
-function tripal_chado_datasets_information_view($oa_id) {
-  $query = db_select('ds_submissions', 'os');
-  $query->fields("os");
-  $query->condition("oa_id", $oa_id);
-  $result = $query->execute()->fetchAll();
-
-  //replace organism id with common name in chado.
-  $organism_id = $result[0]->organism;
-  $organism = chado_get_organism(['organism_id' => $organism_id]);
-  $result[0]->organism = $organism->common_name;
-
-  $output = '';
-
-  if ($result[0]->dataset_type == 'Assembly') {
-    $output = theme('assembly_information_view', ['data' => $result]);
-  }
-  elseif ($result[0]->dataset_type == 'Gene prediction') {
-    $output = theme('gene_prediction_view', ['data' => $result]);
-  }
-  elseif ($result[0]->dataset_type == 'Mapped dataset') {
-    $output = theme('mapped_dataset_view', ['data' => $result]);
-  }
-
-  return $output;
-}
-
-/**
  * @param $variables
  *
  * @return string
