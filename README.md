@@ -1,4 +1,11 @@
+
 [![Build Status](https://travis-ci.org/NAL-i5K/tripal_chado_datasets.svg?branch=master)](https://travis-ci.org/NAL-i5K/tripal_chado_datasets)
+
+# Try Out Tripal HQ Instead
+
+This module is largely redundant with the functionality provided by [Tripal HeadQuarters](https://github.com/statonlab/tripal_hq).  Try that out instead!
+
+
 
 ## Tripal Chado Datasets
 
